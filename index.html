@@ -558,7 +558,7 @@ html, body {
     var safeName = p.player.replace(/'/g, "\\'");
     var playerId = playerIdMap[p.player];
     var avatarHtml = playerId
-      ? '<img src="headshots/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" loading="lazy"><span style="display:none;font-weight:700;color:var(--accent)">#' + jersey + '</span>'
+      ? '<img src="headshots/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><span style="display:none;font-weight:700;color:var(--accent)">#' + jersey + '</span>'
       : '<span style="font-weight:700;color:var(--accent)">#' + jersey + '</span>';
     return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + jersey + '</div></div>';
   }
