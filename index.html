@@ -50,12 +50,12 @@
 
 <!-- ===== 预加载关键资源（LCP优化）===== -->
 <link rel="preload" href="nba-logo.svg?v1" as="image" type="image/svg+xml" fetchpriority="high">
-<link rel="preload" href="styles.css?v=20260724bg" as="style">
+<link rel="preload" href="styles.css?v=20260724iv" as="style">
 <link rel="preload" href="data.js?v=20260726seo" as="script" crossorigin="anonymous">
 
 <!-- ===== 关键内联CSS（首屏渲染不阻塞）===== -->
 <style>
-:root{--bg:#eef5ee;--bg2:#fff;--bg3:#e3eee3;--bg4:#d8e6d8;--ink:#333;--muted:#909399;--rule:#dcdfe6;--accent:#409EFF;--accent2:#409EFF;--accent3:#67C23A;--red:#f56c6c;--gold:#e6a23c;--safe-top:env(safe-area-inset-top,0px)}
+:root{--bg:#eef5ee;--bg2:#fdfcf7;--bg3:#e3eee3;--bg4:#d8e6d8;--ink:#333;--muted:#909399;--rule:#dcdfe6;--accent:#409EFF;--accent2:#409EFF;--accent3:#67C23A;--red:#f56c6c;--gold:#e6a23c;--safe-top:env(safe-area-inset-top,0px)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);height:100vh;height:100dvh;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .topbar{height:48px;padding-top:var(--safe-top);background:var(--bg2);border-bottom:1px solid var(--rule);display:flex;align-items:center;padding-left:12px;padding-right:12px;gap:10px;position:fixed;top:0;left:0;right:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
@@ -73,14 +73,14 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',
 </style>
 
 <!-- ===== 非阻塞式加载完整样式表 ===== -->
-<link rel="stylesheet" href="styles.css?v=20260724bg">
+<link rel="stylesheet" href="styles.css?v=20260724iv">
 
 <!-- ===== defer 加载数据脚本（不阻塞首屏渲染）===== -->
 <script src="data.js?v=20260726seo" defer></script>
 <script src="player_history.js?v=20260726seo" defer></script>
 <script src="player_photos.js?v=20260726seo" defer></script>
 <!-- ECharts 改为按需懒加载，不再阻塞首屏 -->
-<script src="app.js?v=20260726seo" defer></script>
+<script src="app.js?v=20260724iv" defer></script>
 </head>
 <body>
 
