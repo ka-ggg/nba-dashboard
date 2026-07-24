@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>NBA球员数据查询 - 2025-26赛季</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="data.js?v=20260725"></script>
-<script src="player_history.js?v=20260725"></script>
-<script src="player_photos.js?v=20260725"></script>
+<script src="data.js?v=20260725a"></script>
+<script src="player_history.js?v=20260725a"></script>
+<script src="player_photos.js?v=20260725a"></script>
 <style>
 :root {
   --bg: #0b0e14;
@@ -554,13 +554,13 @@ html, body {
   }
 
   function pCard(p) {
-    var initials = p.player.replace(/[^\u4e00-\u9fa5]/g, '').slice(0, 2) || p.player[0];
+    var jersey = p.jersey || 'N/A';
     var safeName = p.player.replace(/'/g, "\\'");
     var playerId = playerIdMap[p.player];
     var avatarHtml = playerId
-      ? '<img src="https://cdn.nba.com/headshots/nba/latest/260x190/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" loading="lazy"><span style="display:none">' + initials + '</span>'
-      : '<span>' + initials + '</span>';
-    return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + (p.jersey || 'N/A') + '</div></div>';
+      ? '<img src="https://cdn.nba.com/headshots/nba/latest/260x190/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" loading="lazy"><span style="display:none;font-weight:700;color:var(--accent)">#' + jersey + '</span>'
+      : '<span style="font-weight:700;color:var(--accent)">#' + jersey + '</span>';
+    return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + jersey + '</div></div>';
   }
 
   // ===== PLAYER DETAIL =====
