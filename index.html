@@ -371,26 +371,6 @@ html, body {
   font-size: 10px; color: var(--muted); margin-top: 8px; text-align: center;
 }
 
-/* ===== CHART NAVIGATION ===== */
-.chart-nav {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  margin-top: 10px; padding: 0 4px;
-}
-.chart-nav-btn {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 1.5px solid var(--rule); background: var(--bg3);
-  color: var(--ink); cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s; flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.chart-nav-btn:hover { border-color: var(--accent2); background: var(--bg4); }
-.chart-nav-btn:active { transform: scale(0.92); background: var(--accent2); border-color: var(--accent2); }
-.chart-nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
-.chart-nav-info {
-  font-size: 11px; color: var(--muted); min-width: 60px; text-align: center;
-  font-variant-numeric: tabular-nums; font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
-}
 </style>
 </head>
 <body>
@@ -580,7 +560,7 @@ html, body {
     var avatarHtml = playerId
       ? '<img src="https://cdn.nba.com/headshots/nba/latest/260x190/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" loading="lazy"><span style="display:none">' + initials + '</span>'
       : '<span>' + initials + '</span>';
-    return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + p.rank + '</div></div>';
+    return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + (p.jersey || 'N/A') + '</div></div>';
   }
 
   // ===== PLAYER DETAIL =====
@@ -604,7 +584,7 @@ html, body {
     body.innerHTML =
       '<div class="player-hero">' +
         '<div class="player-portrait" id="playerPortrait">' +
-          '<div class="fallback-img"><div class="jersey">#' + p.rank + '</div><span style="font-size:11px;color:var(--muted)">加载中...</span></div>' +
+          '<div class="fallback-img"><div class="jersey">#' + (p.jersey || 'N/A') + '</div><span style="font-size:11px;color:var(--muted)">加载中...</span></div>' +
           '<div class="season-tag">25-26定妆照</div>' +
         '</div>' +
         '<div class="player-info-card">' +
@@ -633,16 +613,7 @@ html, body {
             '<div class="detail-grid" id="chartDetailGrid"></div>' +
           '</div>' +
         '</div>' +
-        '<div class="chart-nav" id="chartNav" style="display:none">' +
-          '<button class="chart-nav-btn" id="chartNavPrev" onclick="NBA.panChart(-1)" title="向左滚动">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>' +
-          '</button>' +
-          '<span class="chart-nav-info" id="chartNavInfo"></span>' +
-          '<button class="chart-nav-btn" id="chartNavNext" onclick="NBA.panChart(1)" title="向右滚动">' +
-            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>' +
-          '</button>' +
-        '</div>' +
-        '<div class="chart-hint">滚动鼠标滚轮或点击箭头平移图表 | 点击数据点查看详情</div>' +
+        '<div class="chart-hint">拖动底部滑块查看不同赛季 | 点击折线图数据点查看赛季详情</div>' +
       '</div>';
 
     document.getElementById('modalOverlay').style.display = 'flex';
@@ -669,11 +640,11 @@ html, body {
     if (!portrait) return;
 
     function fallback() {
-      portrait.innerHTML = '<div class="fallback-img"><div class="jersey">#' + p.rank + '</div><span style="font-size:11px;color:var(--muted)">' + p.player + '</span></div><div class="season-tag">25-26定妆照</div>';
+      portrait.innerHTML = '<div class="fallback-img"><div class="jersey">#' + (p.jersey || 'N/A') + '</div><span style="font-size:11px;color:var(--muted)">' + p.player + '</span></div><div class="season-tag">25-26定妆照</div>';
     }
 
     function setPhoto(src) {
-      portrait.innerHTML = '<img src="' + src + '" alt="' + p.player + '" onerror="(function(el){el.innerHTML=\'<div class=fallback-img><div class=jersey>#' + p.rank + '</div><span style=font-size:11px;color:var(--muted)>' + p.player + '</span></div><div class=season-tag>25-26定妆照</div>\'})(this.parentElement)"><div class="season-tag">25-26定妆照</div>';
+      portrait.innerHTML = '<img src="' + src + '" alt="' + p.player + '" onerror="(function(el){el.innerHTML=\'<div class=fallback-img><div class=jersey>#' + (p.jersey || 'N/A') + '</div><span style=font-size:11px;color:var(--muted)>' + p.player + '</span></div><div class=season-tag>25-26定妆照</div>\'})(this.parentElement)"><div class="season-tag">25-26定妆照</div>';
     }
 
     // Try NBA CDN headshot first
@@ -753,20 +724,17 @@ html, body {
     var ink = style.getPropertyValue('--ink').trim();
     var muted = style.getPropertyValue('--muted').trim();
     var rule = style.getPropertyValue('--rule').trim();
+    var bg2 = style.getPropertyValue('--bg2').trim();
 
     chartInst = echarts.init(container, null, { renderer: 'svg' });
 
     var seasonLabels = history.map(function(h) { return h.season; });
     var totalSeasons = history.length;
     var visibleCount = Math.min(totalSeasons, 7);
-    var needScroll = totalSeasons > visibleCount;
+    var needZoom = totalSeasons > visibleCount;
 
-    // Show/hide nav buttons
-    var nav = document.getElementById('chartNav');
-    if (nav) nav.style.display = needScroll ? 'flex' : 'none';
-
-    var endPercent = needScroll ? (visibleCount / totalSeasons * 100) : 100;
-    var startPercent = needScroll ? Math.max(0, 100 - endPercent) : 0;
+    var endPercent = needZoom ? (visibleCount / totalSeasons * 100) : 100;
+    var startPercent = needZoom ? 0 : 0;
 
     var option = {
       tooltip: {
@@ -776,71 +744,115 @@ html, body {
         borderWidth: 1,
         textStyle: { color: ink, fontSize: 11 },
         confine: true,
-        appendToBody: false,
       },
       legend: {
         data: ['得分', '篮板', '助攻', '抢断'],
-        bottom: 0,
-        textStyle: { color: muted, fontSize: 10, padding: [2, 8, 2, 2] },
+        top: -6,
+        textStyle: { color: muted, fontSize: 10, padding: [0, 8, 0, 2] },
         itemWidth: 12, itemHeight: 2, icon: 'roundRect',
+        itemGap: 12,
       },
-      grid: { left: 40, right: 16, top: 12, bottom: 32 },
+      grid: { left: 44, right: 16, top: 24, bottom: needZoom ? 48 : 24 },
       xAxis: {
         type: 'category',
         data: seasonLabels,
         axisLine: { lineStyle: { color: rule } },
         axisTick: { show: false },
-        axisLabel: { color: muted, fontSize: 9, rotate: history.length > 12 ? 45 : 0 },
+        axisLabel: { color: muted, fontSize: 9, rotate: history.length > 12 ? 45 : 0, margin: 8 },
       },
       yAxis: {
         type: 'value',
         splitLine: { lineStyle: { color: rule, type: 'dashed' } },
         axisLabel: { color: muted, fontSize: 9 },
       },
-      dataZoom: needScroll ? [
+      dataZoom: needZoom ? [
+        {
+          type: 'slider',
+          start: startPercent,
+          end: endPercent,
+          height: 18,
+          bottom: 6,
+          backgroundColor: 'transparent',
+          dataBackground: {
+            lineStyle: { color: rule, width: 1 },
+            areaStyle: { color: 'rgba(59,130,246,0.06)' }
+          },
+          selectedDataBackground: {
+            lineStyle: { color: accent2, width: 1.5 },
+            areaStyle: { color: 'rgba(59,130,246,0.15)' }
+          },
+          fillerColor: 'rgba(59,130,246,0.18)',
+          borderColor: 'transparent',
+          handleStyle: {
+            color: accent2,
+            borderColor: '#fff',
+            borderWidth: 2,
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+          },
+          handleSize: '100%',
+          moveHandleStyle: { color: accent2 },
+          emphasis: {
+            handleStyle: { color: '#60a5fa', borderColor: '#fff', borderWidth: 2.5 }
+          },
+          textStyle: { color: muted, fontSize: 9 },
+          zoomLock: true,
+          brushSelect: false,
+          animation: true,
+          animationDurationUpdate: 400,
+          animationEasingUpdate: 'cubicOut',
+        },
         {
           type: 'inside',
           start: startPercent,
-          end: 100,
+          end: endPercent,
           zoomOnMouseWheel: false,
           moveOnMouseMove: true,
           moveOnMouseWheel: true,
-          orient: 'horizontal',
         }
       ] : [],
       series: [
-        { name: '得分', type: 'line', data: history.map(function(h) { return h.pts; }), smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { color: accent, width: 2.5 }, itemStyle: { color: accent, borderColor: '#fff', borderWidth: 1.5 }, emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } } },
-        { name: '篮板', type: 'line', data: history.map(function(h) { return h.reb; }), smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { color: accent2, width: 2.5 }, itemStyle: { color: accent2, borderColor: '#fff', borderWidth: 1.5 }, emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } } },
-        { name: '助攻', type: 'line', data: history.map(function(h) { return h.ast; }), smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { color: accent3, width: 2.5 }, itemStyle: { color: accent3, borderColor: '#fff', borderWidth: 1.5 }, emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } } },
-        { name: '抢断', type: 'line', data: history.map(function(h) { return h.stl; }), smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { color: gold, width: 2.5 }, itemStyle: { color: gold, borderColor: '#fff', borderWidth: 1.5 }, emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } } },
+        { 
+          name: '得分', type: 'line', data: history.map(function(h) { return h.pts; }), 
+          smooth: true, symbol: 'circle', symbolSize: 6, 
+          lineStyle: { color: accent, width: 2.5 }, 
+          itemStyle: { color: accent, borderColor: '#fff', borderWidth: 1.5 }, 
+          emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
+          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animationDelay: function(idx) { return idx * 40; },
+        },
+        { 
+          name: '篮板', type: 'line', data: history.map(function(h) { return h.reb; }), 
+          smooth: true, symbol: 'circle', symbolSize: 6, 
+          lineStyle: { color: accent2, width: 2.5 }, 
+          itemStyle: { color: accent2, borderColor: '#fff', borderWidth: 1.5 }, 
+          emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
+          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animationDelay: function(idx) { return idx * 40 + 100; },
+        },
+        { 
+          name: '助攻', type: 'line', data: history.map(function(h) { return h.ast; }), 
+          smooth: true, symbol: 'circle', symbolSize: 6, 
+          lineStyle: { color: accent3, width: 2.5 }, 
+          itemStyle: { color: accent3, borderColor: '#fff', borderWidth: 1.5 }, 
+          emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
+          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animationDelay: function(idx) { return idx * 40 + 200; },
+        },
+        { 
+          name: '抢断', type: 'line', data: history.map(function(h) { return h.stl; }), 
+          smooth: true, symbol: 'circle', symbolSize: 6, 
+          lineStyle: { color: gold, width: 2.5 }, 
+          itemStyle: { color: gold, borderColor: '#fff', borderWidth: 1.5 }, 
+          emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
+          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animationDelay: function(idx) { return idx * 40 + 300; },
+        },
       ],
-      animation: true,
-      animationDuration: 600,
-      animationEasing: 'cubicOut',
     };
 
     chartInst.setOption(option);
-
-    // Update nav info
-    function updateNavInfo() {
-      var opt = chartInst.getOption();
-      var dz = opt.dataZoom && opt.dataZoom[0];
-      if (dz && needScroll) {
-        var s = dz.start || 0;
-        var e = dz.end || 100;
-        var pageStart = Math.round(s / 100 * totalSeasons) + 1;
-        var pageEnd = Math.min(Math.round(e / 100 * totalSeasons), totalSeasons);
-        var info = document.getElementById('chartNavInfo');
-        if (info) info.textContent = pageStart + '-' + pageEnd + ' / ' + totalSeasons;
-        var prevBtn = document.getElementById('chartNavPrev');
-        var nextBtn = document.getElementById('chartNavNext');
-        if (prevBtn) prevBtn.disabled = s <= 0;
-        if (nextBtn) nextBtn.disabled = e >= 100;
-      }
-    }
-
-    chartInst.on('dataZoom', updateNavInfo);
-    updateNavInfo();
 
     chartInst.on('click', function(params) {
       if (params.componentType === 'series') {
@@ -862,29 +874,6 @@ html, body {
     });
 
     window.addEventListener('resize', function() { if (chartInst) chartInst.resize(); });
-  };
-
-  // ===== CHART PANNING =====
-  NBA.panChart = function(direction) {
-    if (!chartInst) return;
-    var opt = chartInst.getOption();
-    var dz = opt.dataZoom && opt.dataZoom[0];
-    if (!dz) return;
-    var s = dz.start || 0;
-    var e = dz.end || 100;
-    var span = e - s;
-    var shift = span * 0.6 * direction;
-    var newStart = Math.max(0, Math.min(100 - span, s + shift));
-    var newEnd = newStart + span;
-    chartInst.dispatchAction({
-      type: 'dataZoom',
-      start: newStart,
-      end: newEnd,
-      animation: {
-        duration: 500,
-        easing: 'cubicOut'
-      }
-    });
   };
 
   // Keyboard
