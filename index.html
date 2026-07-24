@@ -5,11 +5,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>NBA球员数据查询 - 2025-26赛季</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="data.js?v=20260725g"></script>
-<script src="player_history.js?v=20260725g"></script>
-<script src="player_photos.js?v=20260725g"></script>
-<link rel="stylesheet" href="styles.css?v=20260725g">
+
+<!-- ===== 预加载关键资源（LCP优化）===== -->
+<link rel="preload" href="nba-logo.svg?v1" as="image" type="image/svg+xml" fetchpriority="high">
+<link rel="preload" href="styles.css?v=20260726" as="style">
+<link rel="preload" href="data.js?v=20260726" as="script" crossorigin="anonymous">
+
+<!-- ===== 关键内联CSS（首屏渲染不阻塞）===== -->
+<style>
+:root{--bg:#0b0e14;--bg2:#131820;--bg3:#1c2333;--rule:#2a3344;--ink:#e8edf5;--muted:#6b7a90;--accent:#f58426;--accent2:#3b82f6;--safe-top:env(safe-area-inset-top,0px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--ink);height:100vh;height:100dvh;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.topbar{height:48px;padding-top:var(--safe-top);background:var(--bg2);border-bottom:1px solid var(--rule);display:flex;align-items:center;padding-left:12px;padding-right:12px;gap:10px;position:fixed;top:0;left:0;right:0;z-index:200}
+.menu-btn{width:34px;height:34px;border:none;background:none;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;flex-shrink:0}
+.brand{font-size:16px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.brand .c{color:var(--accent)}
+.nba-logo-img{height:28px;width:auto;flex-shrink:0;border-radius:2px}
+.search-bar{position:fixed;top:48px;padding-top:var(--safe-top);left:0;right:0;height:44px;background:var(--bg);z-index:199;display:flex;align-items:center;padding-left:12px;padding-right:12px;border-bottom:1px solid var(--rule)}
+.search-bar input{width:100%;height:34px;background:var(--bg2);border:1.5px solid var(--rule);border-radius:17px;padding:0 36px 0 14px;color:var(--ink);font-size:14px;outline:none;-webkit-appearance:none}
+.search-bar input::placeholder{color:var(--muted);font-size:13px}
+.main{position:fixed;top:92px;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px}
+.empty-state{text-align:center;padding:40px 16px;color:var(--muted)}
+</style>
+
+<!-- ===== 非阻塞式加载完整样式表 ===== -->
+<link rel="stylesheet" href="styles.css?v=20260726">
+
+<!-- ===== defer 加载数据脚本（不阻塞首屏渲染）===== -->
+<script src="data.js?v=20260726" defer></script>
+<script src="player_history.js?v=20260726" defer></script>
+<script src="player_photos.js?v=20260726" defer></script>
+<!-- ECharts 改为按需懒加载，不再阻塞首屏 -->
+<script src="app.js?v=20260726" defer></script>
 </head>
 <body>
 
@@ -25,7 +52,7 @@
   <button class="menu-btn" onclick="NBA.openDrawer()" aria-label="菜单">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-  <div class="brand"><img src="nba-logo.svg?v1" alt="NBA" class="nba-logo-img"><span class="c">NBA</span> 球员数据</div>
+  <div class="brand"><img src="nba-logo.svg?v1" alt="NBA" class="nba-logo-img" fetchpriority="high" decoding="async"><span class="c">NBA</span> 球员数据</div>
 </header>
 
 <!-- Search Bar -->
@@ -70,6 +97,5 @@
   </div>
 </div>
 
-<script src="app.js?v=20260725g"></script>
 </body>
 </html>
