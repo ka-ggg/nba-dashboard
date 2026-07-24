@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ka-ggg.github.io/nba-dashboard/sitemap.xml
