@@ -346,7 +346,7 @@ var endPercent = needZoom ? (visibleCount / totalSeasons * 100) : 100;
 var seriesCommon = {
 type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
 lineStyle: { width: 2.5 },
-itemStyle: { borderColor: '#fdfcf7', borderWidth: 1.5 },
+itemStyle: { borderColor: '#fff', borderWidth: 1.5 },
 emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
 animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
 };
