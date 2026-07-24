@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>NBA球员数据查询 - 2025-26赛季</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="data.js"></script>
-<script src="player_history.js"></script>
-<script src="player_photos.js"></script>
+<script src="data.js?v=20260725"></script>
+<script src="player_history.js?v=20260725"></script>
+<script src="player_photos.js?v=20260725"></script>
 <style>
 :root {
   --bg: #0b0e14;
@@ -639,35 +639,25 @@ html, body {
     var portrait = document.getElementById('playerPortrait');
     if (!portrait) return;
 
+    var jerseyNum = (p.jersey && p.jersey !== 'N/A' && p.jersey !== '0') ? p.jersey : 'N/A';
+
     function fallback() {
-      portrait.innerHTML = '<div class="fallback-img"><div class="jersey">#' + (p.jersey || 'N/A') + '</div><span style="font-size:11px;color:var(--muted)">' + p.player + '</span></div><div class="season-tag">25-26定妆照</div>';
+      portrait.innerHTML = '<div class="fallback-img"><div class="jersey">#' + jerseyNum + '</div><span style="font-size:11px;color:var(--muted)">' + p.player + '</span></div><div class="season-tag">25-26定妆照</div>';
     }
 
     function setPhoto(src) {
-      portrait.innerHTML = '<img src="' + src + '" alt="' + p.player + '" onerror="(function(el){el.innerHTML=\'<div class=fallback-img><div class=jersey>#' + (p.jersey || 'N/A') + '</div><span style=font-size:11px;color:var(--muted)>' + p.player + '</span></div><div class=season-tag>25-26定妆照</div>\'})(this.parentElement)"><div class="season-tag">25-26定妆照</div>';
+      var img = new Image();
+      img.onload = function() {
+        portrait.innerHTML = '<img src="' + src + '" alt="' + p.player + '"><div class="season-tag">25-26定妆照</div>';
+      };
+      img.onerror = function() { fallback(); };
+      img.src = src;
     }
 
-    // Try NBA CDN headshot first
     var playerId = playerIdMap[p.player];
-    if (playerId) {
-      var nbaUrl = 'https://cdn.nba.com/headshots/nba/latest/1040x760/' + playerId + '.png';
-      var img = new Image();
-      img.onload = function() { setPhoto(nbaUrl); };
-      img.onerror = function() {
-        // Try Wikipedia fallback
-        var searchName = p.player.replace(/-/g, ' ');
-        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName))
-          .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
-          .then(function(data) {
-            if (data.thumbnail && data.thumbnail.source) { setPhoto(data.thumbnail.source); }
-            else { fallback(); }
-          })
-          .catch(function() { fallback(); });
-      };
-      img.src = nbaUrl;
-    } else {
+    if (!playerId) {
       // No player ID, try Wikipedia
-      var searchName = p.player.replace(/-/g, ' ');
+      var searchName = p.player.replace(/[-·]/g, ' ');
       fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName))
         .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
         .then(function(data) {
@@ -675,7 +665,38 @@ html, body {
           else { fallback(); }
         })
         .catch(function() { fallback(); });
+      return;
     }
+
+    // Try multiple NBA CDN URLs in sequence
+    var urls = [
+      'https://cdn.nba.com/headshots/nba/latest/1040x760/' + playerId + '.png',
+      'https://cdn.nba.com/headshots/nba/latest/260x190/' + playerId + '.png',
+      'https://cdn.nba.com/headshots/nba/latest/760x570/' + playerId + '.png',
+    ];
+
+    var tryIdx = 0;
+    function tryNext() {
+      if (tryIdx >= urls.length) {
+        // All NBA CDN failed, try Wikipedia
+        var searchName = p.player.replace(/[-·]/g, ' ');
+        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(searchName))
+          .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
+          .then(function(data) {
+            if (data.thumbnail && data.thumbnail.source) { setPhoto(data.thumbnail.source); }
+            else { fallback(); }
+          })
+          .catch(function() { fallback(); });
+        return;
+      }
+      var url = urls[tryIdx];
+      tryIdx++;
+      var testImg = new Image();
+      testImg.onload = function() { setPhoto(url); };
+      testImg.onerror = function() { tryNext(); };
+      testImg.src = url;
+    }
+    tryNext();
   }
 
   // ===== HISTORY CHART =====
