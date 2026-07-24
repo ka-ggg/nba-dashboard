@@ -864,7 +864,7 @@ html, body {
 
     var seasonLabels = history.map(function(h) { return h.season; });
     var totalSeasons = history.length;
-    var visibleCount = Math.min(totalSeasons, 7);
+    var visibleCount = Math.min(totalSeasons, 5);
     var needZoom = totalSeasons > visibleCount;
 
     var endPercent = needZoom ? (visibleCount / totalSeasons * 100) : 100;
@@ -901,13 +901,11 @@ html, body {
       },
       dataZoom: needZoom ? [
         {
-          type: 'inside',
+          type: 'slider',
+          show: false,
           start: startPercent,
           end: endPercent,
-          zoomOnMouseWheel: false,
-          moveOnMouseMove: true,
-          moveOnMouseWheel: true,
-          throttle: 30,
+          zoomLock: true,
         }
       ] : [],
       animation: true,
@@ -921,7 +919,7 @@ html, body {
           lineStyle: { color: accent, width: 2.5 }, 
           itemStyle: { color: accent, borderColor: '#fff', borderWidth: 1.5 }, 
           emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
-          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
           animationDelay: function(idx) { return idx * 40; },
         },
         { 
@@ -930,7 +928,7 @@ html, body {
           lineStyle: { color: accent2, width: 2.5 }, 
           itemStyle: { color: accent2, borderColor: '#fff', borderWidth: 1.5 }, 
           emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
-          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
           animationDelay: function(idx) { return idx * 40 + 100; },
         },
         { 
@@ -939,7 +937,7 @@ html, body {
           lineStyle: { color: accent3, width: 2.5 }, 
           itemStyle: { color: accent3, borderColor: '#fff', borderWidth: 1.5 }, 
           emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
-          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
           animationDelay: function(idx) { return idx * 40 + 200; },
         },
         { 
@@ -948,7 +946,7 @@ html, body {
           lineStyle: { color: gold, width: 2.5 }, 
           itemStyle: { color: gold, borderColor: '#fff', borderWidth: 1.5 }, 
           emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
-          animation: true, animationDuration: 800, animationEasing: 'cubicOut',
+          animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
           animationDelay: function(idx) { return idx * 40 + 300; },
         },
       ],
