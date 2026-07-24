@@ -337,6 +337,7 @@ var gold = style.getPropertyValue('--gold').trim();
 var ink = style.getPropertyValue('--ink').trim();
 var muted = style.getPropertyValue('--muted').trim();
 var rule = style.getPropertyValue('--rule').trim();
+var bg2 = style.getPropertyValue('--bg2').trim();
 chartInst = echarts.init(container, null, { renderer: 'svg' });
 var seasonLabels = history.map(function(h) { return h.season; });
 var totalSeasons = history.length;
@@ -346,7 +347,7 @@ var endPercent = needZoom ? (visibleCount / totalSeasons * 100) : 100;
 var seriesCommon = {
 type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
 lineStyle: { width: 2.5 },
-itemStyle: { borderColor: '#fff', borderWidth: 1.5 },
+itemStyle: { borderColor: bg2, borderWidth: 1.5 },
 emphasis: { symbolSize: 12, itemStyle: { borderWidth: 2.5 } },
 animation: true, animationDuration: 800, animationDurationUpdate: 0, animationEasing: 'cubicOut',
 };
