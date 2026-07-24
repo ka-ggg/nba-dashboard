@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>NBA球员数据查询 - 2025-26赛季</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="data.js?v=20260725c"></script>
-<script src="player_history.js?v=20260725c"></script>
-<script src="player_photos.js?v=20260725c"></script>
+<script src="data.js?v=20260725d"></script>
+<script src="player_history.js?v=20260725d"></script>
+<script src="player_photos.js?v=20260725d"></script>
 <style>
 :root {
   --bg: #0b0e14;
@@ -557,8 +557,9 @@ html, body {
     var jersey = p.jersey || 'N/A';
     var safeName = p.player.replace(/'/g, "\\'");
     var playerId = playerIdMap[p.player];
+    var photoVer = 'v3';
     var avatarHtml = playerId
-      ? '<img src="headshots/' + playerId + '.png" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><span style="display:none;font-weight:700;color:var(--accent)">#' + jersey + '</span>'
+      ? '<img src="headshots/' + playerId + '.png?' + photoVer + '" alt="' + p.player + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><span style="display:none;font-weight:700;color:var(--accent)">#' + jersey + '</span>'
       : '<span style="font-weight:700;color:var(--accent)">#' + jersey + '</span>';
     return '<div class="player-card" onclick="NBA.openDetail(\'' + safeName + '\')"><div class="avatar">' + avatarHtml + '</div><div class="info"><div class="name">' + p.player + '</div><div class="mini-stats"><span style="color:var(--accent)">' + p.pts.toFixed(1) + '分</span><span style="color:var(--accent2)">' + p.reb.toFixed(1) + '板</span><span style="color:var(--accent3)">' + p.ast.toFixed(1) + '助</span></div></div><div class="rank">#' + jersey + '</div></div>';
   }
@@ -651,10 +652,10 @@ html, body {
     // Use locally hosted headshot
     var img = new Image();
     img.onload = function() {
-      portrait.innerHTML = '<img src="headshots/' + playerId + '.png" alt="' + p.player + '"><div class="season-tag">25-26定妆照</div>';
+      portrait.innerHTML = '<img src="headshots/' + playerId + '.png?v3" alt="' + p.player + '"><div class="season-tag">25-26定妆照</div>';
     };
     img.onerror = function() { fallback(); };
-    img.src = 'headshots/' + playerId + '.png';
+    img.src = 'headshots/' + playerId + '.png?v3';
   }
 
   // ===== HISTORY CHART =====
