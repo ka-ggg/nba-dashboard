@@ -424,11 +424,13 @@ document.getElementById('chartDetailGrid').innerHTML =
 overlay.classList.add('show');
 }
 });
-window.addEventListener('resize', function() { if (chartInst) chartInst.resize(); });
+/* resize listener moved to module level */
 };
 document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') { NBA.closeModal(); NBA.closeDrawer(); }
 });
+/* module-level resize handler: added once, not per-chart */
+window.addEventListener('resize', function() { if (chartInst) chartInst.resize(); });
 buildNavs();
 renderAll();
 })();
