@@ -32,15 +32,26 @@ function initGameButton() {
       '<div class="g82-embed-modal">' +
         '<div class="g82-embed-header">' +
           '<h2>🏀 82-0完美阵容大挑战</h2>' +
-          '<button class="g82-embed-close" onclick="document.getElementById(\'game82Overlay\').style.display=\'none\'" aria-label="关闭">&times;</button>' +
+          '<button class="g82-embed-close" id="game82CloseBtn" aria-label="关闭">&times;</button>' +
         '</div>' +
         '<div class="g82-embed-body">' +
           '<iframe id="game82Frame" src="about:blank" title="82-0完美阵容大挑战" allow="fullscreen"></iframe>' +
         '</div>' +
       '</div>';
-    overlay.onclick = function(e) { if (e.target === overlay) { overlay.style.display = 'none'; } };
     document.body.appendChild(overlay);
   }
+
+  // 绑定关闭事件（恢复页面滚动）
+  var closeBtn = document.getElementById('game82CloseBtn');
+  if (closeBtn) closeBtn.onclick = closeGame;
+  overlay.onclick = function(e) { if (e.target === overlay) closeGame(); };
+}
+
+function closeGame() {
+  var overlay = document.getElementById('game82Overlay');
+  if (!overlay) return;
+  overlay.style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function openGame() {
@@ -54,13 +65,12 @@ function openGame() {
   document.body.style.overflow = 'hidden';
 }
 
-// 关闭时恢复滚动
+// ESC键关闭
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     var overlay = document.getElementById('game82Overlay');
     if (overlay && overlay.style.display !== 'none') {
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
+      closeGame();
     }
   }
 });
