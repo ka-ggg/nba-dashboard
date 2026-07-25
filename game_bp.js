@@ -60,7 +60,7 @@ function openGame() {
   var frame = document.getElementById('gameBpFrame');
   if (!overlay || !frame) return;
   if (frame.src.indexOf('build-player.html') === -1) {
-    frame.src = 'build-player.html?v=1';
+    frame.src = 'build-player.html?v=2';
   }
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
