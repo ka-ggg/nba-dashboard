@@ -83,3 +83,13 @@
 .g82-result-actions{display:flex;gap:10px;justify-content:center;padding:8px 0}
 .g82-btn-primary{padding:12px 28px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s}.g82-btn-primary:active{transform:scale(0.96)}
 .g82-btn-secondary{padding:12px 28px;background:var(--bg3);color:var(--muted);border:1px solid var(--rule);border-radius:6px;font-size:14px;cursor:pointer;transition:all 0.15s}.g82-btn-secondary:active{background:var(--bg4);color:var(--ink)}
+
+/* ===== 内嵌游戏弹窗样式 ===== */
+.g82-embed-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:700;display:flex;align-items:stretch;justify-content:stretch;animation:fadeIn 0.2s}
+.g82-embed-modal{background:#110427;width:100%;height:100%;overflow:hidden;display:flex;flex-direction:column;animation:slideUp 0.3s cubic-bezier(0.16,1,0.3,1)}
+@media (min-width:769px){.g82-embed-overlay{align-items:center;justify-content:center;padding:20px}.g82-embed-modal{width:100%;max-width:480px;height:auto;max-height:92vh;border-radius:12px;border:1px solid var(--rule);box-shadow:0 8px 40px rgba(0,0,0,0.4)}}
+.g82-embed-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#16213e;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.g82-embed-header h2{font-size:15px;font-weight:700;color:#ecf0f1}
+.g82-embed-close{width:32px;height:32px;border-radius:6px;border:none;background:rgba(255,255,255,0.08);color:#ecf0f1;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}.g82-embed-close:active{background:#e74c3c;color:#fff}
+.g82-embed-body{flex:1;overflow:hidden;position:relative;background:#110427}
+.g82-embed-body iframe{width:100%;height:100%;border:none;display:block}
