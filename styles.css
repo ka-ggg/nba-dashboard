@@ -2,10 +2,17 @@
 
 
 /* ===== My Team Feature ===== */
-.my-team-fab{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));right:16px;z-index:250;background:var(--accent);color:#fff;border:none;border-radius:28px;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 4px 16px rgba(64,158,255,0.4);transition:transform 0.15s,box-shadow 0.15s;-webkit-tap-highlight-color:transparent}
-.my-team-fab:active{transform:scale(0.95)}
-@media (hover:hover){.my-team-fab:hover{box-shadow:0 6px 20px rgba(64,158,255,0.5);transform:translateY(-1px)}}
-@media (min-width:769px){.my-team-fab{bottom:20px;right:20px;padding:14px 24px;font-size:15px}}
+/* Taskbar menu (top-left) */
+.mt-taskbar-btn{position:relative}
+.mt-taskbar-btn svg{color:var(--accent)}
+@media (min-width:769px){.mt-taskbar-btn{display:flex !important}}
+.mt-taskbar-menu{position:fixed;top:calc(48px + var(--safe-top));left:8px;z-index:350;background:var(--bg2);border:1px solid var(--rule);border-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,0.3);min-width:140px;display:none;flex-direction:column;padding:4px;gap:2px}
+.mt-taskbar-menu.open{display:flex;animation:mtMenuSlide 0.15s ease}
+@keyframes mtMenuSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.mt-taskbar-menu-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink);transition:background 0.12s;-webkit-tap-highlight-color:transparent}
+.mt-taskbar-menu-item:active{background:var(--bg3)}
+@media (hover:hover){.mt-taskbar-menu-item:hover{background:var(--bg3)}}
+.mt-taskbar-menu-item svg{color:var(--accent);flex-shrink:0}
 .my-team-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;backdrop-filter:blur(4px)}
 .my-team-modal{background:var(--bg);width:100%;max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,0.3)}
 @media (min-width:769px){.my-team-modal{min-height:auto;margin:20px auto;border-radius:8px;overflow:hidden;max-height:calc(100vh - 40px)}}
@@ -99,7 +106,72 @@
 .mt-clause-info-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .mt-clause-info-item strong{font-size:13px;color:var(--ink);display:block;margin-bottom:2px}
 .mt-clause-info-item p{font-size:12px;color:var(--muted);line-height:1.5}
-.mt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg4);color:var(--ink);padding:10px 20px;border-radius:6px;font-size:13px;z-index:500;opacity:0;pointer-events:none;transition:all 0.25s;box-shadow:0 4px 16px rgba(0,0,0,0.3);max-width:90%;text-align:center}
+.mt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg4);color:var(--ink);padding:10px 20px;border-radius:6px;font-size:13px;z-index:500;opacity:0;pointer-events:none;transition:all 0.25s;box-shadow:0 4px 16px rgba(0,0,0,0.3);max-width:90%;text-align:center;white-space:pre-line}
 .mt-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.mt-toast.error{border:1px solid var(--red);background:rgba(245,108,108,0.15)}
+.mt-toast.success{border:1px solid var(--accent3);background:rgba(103,194,58,0.15)}
+
+/* ===== Two-Way Roster (Task 2) ===== */
+.mt-roster-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:4px}
+.mt-roster-section-header h3{font-size:15px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;margin:0}
+.mt-roster-hint{font-size:11px;color:var(--muted)}
+.mt-tw-badge{background:var(--gold)!important}
+.mt-tw-section{margin-top:4px}
+.mt-tw-tag{font-size:10px;background:rgba(230,162,60,0.15);color:var(--gold);padding:2px 6px;border-radius:3px;font-weight:600;border:1px solid rgba(230,162,60,0.3)}
+.mt-roster-card-tw{border-color:rgba(230,162,60,0.2);background:rgba(230,162,60,0.03)}
+.mt-empty-tw{text-align:center;padding:16px;color:var(--muted);font-size:13px;background:var(--bg2);border:1px dashed var(--rule);border-radius:6px}
+.mt-roster-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.mt-btn-sm{padding:4px 8px;font-size:11px;border:1px solid var(--rule);background:var(--bg3);color:var(--ink);border-radius:3px;cursor:pointer;white-space:nowrap}
+.mt-btn-sm:active{background:var(--bg4)}
+.mt-btn-sm:disabled{opacity:0.4;cursor:not-allowed}
+.mt-btn-tw-toggle{border-color:var(--gold);color:var(--gold)}
+.mt-btn-tw-toggle:active{background:rgba(230,162,60,0.1)}
+.mt-btn-release{border-color:var(--red);color:var(--red)}
+.mt-btn-release:active{background:rgba(245,108,108,0.1)}
+.mt-btn-promote{border-color:var(--accent3);color:var(--accent3)}
+.mt-btn-promote:active{background:rgba(103,194,58,0.1)}
+.mt-btn-primary{padding:8px 20px;font-size:14px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:4px;cursor:pointer;font-weight:600}
+.mt-btn-primary:active{opacity:0.85}
+.mt-sign-group{display:flex;gap:4px;flex-shrink:0}
+.mt-sign-tw{border-color:var(--gold);color:var(--gold)}
+.mt-sign-tw:active{background:rgba(230,162,60,0.1)}
+
+/* ===== Trade Modal (Task 3) ===== */
+.mt-trade-overlay{z-index:450}
+.mt-trade-header{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;background:var(--bg2);border:1px solid var(--rule);border-radius:6px;margin-bottom:16px}
+.mt-trade-player-card{flex:1;text-align:center;min-width:0}
+.mt-trade-player-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;word-break:break-all}
+.mt-trade-player-detail{font-size:12px;color:var(--muted);margin-bottom:4px}
+.mt-trade-target{opacity:0.7}
+.mt-trade-placeholder{font-size:14px;color:var(--muted);padding:12px 0;font-style:italic}
+.mt-trade-arrow{font-size:24px;color:var(--accent);flex-shrink:0}
+.mt-trade-step{margin-bottom:16px}
+.mt-trade-step h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.mt-trade-step-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.mt-back-btn{padding:4px 10px;font-size:12px;border:1px solid var(--rule);background:var(--bg3);color:var(--ink);border-radius:4px;cursor:pointer;white-space:nowrap}
+.mt-back-btn:active{background:var(--bg4)}
+.mt-trade-team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (min-width:500px){.mt-trade-team-grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:769px){.mt-trade-team-grid{grid-template-columns:repeat(5,1fr)}}
+.mt-trade-team-card{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.mt-trade-team-card:active{transform:scale(0.95);border-color:var(--accent)}
+@media (hover:hover){.mt-trade-team-card:hover{border-color:var(--accent);background:var(--bg3)}}
+.mt-trade-team-card img{width:36px;height:36px;object-fit:contain}
+.mt-trade-team-card span:first-of-type{font-size:12px;font-weight:600;color:var(--ink);text-align:center}
+.mt-trade-team-count{font-size:10px;color:var(--muted)}
+.mt-trade-player-list{max-height:400px;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:6px}
+.mt-trade-player-option{background:var(--bg2);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;transition:all 0.12s;-webkit-tap-highlight-color:transparent}
+.mt-trade-player-option:active{border-color:var(--accent);background:var(--bg3)}
+@media (hover:hover){.mt-trade-player-option:hover{border-color:var(--accent);background:var(--bg3)}}
+.mt-trade-player-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;min-width:0}
+.mt-trade-player-stats{font-size:11px;color:var(--muted)}
+.mt-trade-select-icon{color:var(--accent);font-size:18px;flex-shrink:0}
+.mt-trade-confirm-box{background:var(--bg2);border:1px solid var(--rule);border-radius:6px;padding:16px;margin-bottom:16px}
+.mt-trade-confirm-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px}
+.mt-trade-confirm-row span{color:var(--muted)}
+.mt-trade-confirm-row strong{color:var(--ink);font-weight:600}
+.mt-trade-confirm-divider{height:1px;background:var(--rule);margin:6px 0}
+.mt-trade-warn strong{color:var(--gold)!important}
+.mt-trade-actions{display:flex;gap:10px;justify-content:center}
 .mt-toast.error{border:1px solid var(--red);color:var(--red)}
 .mt-toast.success{border:1px solid var(--accent3);color:var(--accent3)}
