@@ -50,8 +50,8 @@
 
 <!-- ===== 预加载关键资源（LCP优化）===== -->
 <link rel="preload" href="nba-logo.svg?v1" as="image" type="image/svg+xml" fetchpriority="high">
-<link rel="preload" href="styles.css?v=20260726mt7" as="style">
-<link rel="preload" href="data.js?v=20260726mt7" as="script" crossorigin="anonymous">
+<link rel="preload" href="styles.css?v=20260726mt8" as="style">
+<link rel="preload" href="data.js?v=20260726mt8" as="script" crossorigin="anonymous">
 
 <!-- ===== 关键内联CSS（首屏渲染不阻塞）===== -->
 <style>
@@ -73,15 +73,16 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',
 </style>
 
 <!-- ===== 非阻塞式加载完整样式表 ===== -->
-<link rel="stylesheet" href="styles.css?v=20260726mt7">
+<link rel="stylesheet" href="styles.css?v=20260726mt8">
 
 <!-- ===== defer 加载数据脚本（不阻塞首屏渲染）===== -->
-<script src="data.js?v=20260726mt7" defer></script>
-<script src="player_history.js?v=20260726mt7" defer></script>
-<script src="player_photos.js?v=20260726mt7" defer></script>
+<script src="data.js?v=20260726mt8" defer></script>
+<script src="player_history.js?v=20260726mt8" defer></script>
+<script src="player_photos.js?v=20260726mt8" defer></script>
 <!-- ECharts 改为按需懒加载，不再阻塞首屏 -->
-<script src="app.js?v=20260726mt7" defer></script>
-<script src="game_82.js?v=20260726mt7" defer></script>
+<script src="app.js?v=20260726mt8" defer></script>
+<script src="game_82.js?v=20260726mt8" defer></script>
+<script src="game_bp.js?v=20260726mt8" defer></script>
 </head>
 <body>
 
