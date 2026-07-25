@@ -50,7 +50,7 @@
 
 <!-- ===== 预加载关键资源（LCP优化）===== -->
 <link rel="preload" href="nba-logo.svg?v1" as="image" type="image/svg+xml" fetchpriority="high">
-<link rel="preload" href="styles.css?v=20260726op5" as="style">
+<link rel="preload" href="styles.css?v=20260726op6" as="style">
 <link rel="preload" href="data.js?v=20260726op" as="script" crossorigin="anonymous">
 
 <!-- ===== 关键内联CSS（首屏渲染不阻塞）===== -->
@@ -81,7 +81,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',
 </style>
 
 <!-- ===== 非阻塞式加载完整样式表 ===== -->
-<link rel="stylesheet" href="styles.css?v=20260726op5">
+<link rel="stylesheet" href="styles.css?v=20260726op6">
 
 <!-- ===== defer 加载数据脚本（不阻塞首屏渲染）===== -->
 <script src="data.js?v=20260726op" defer></script>
@@ -151,6 +151,48 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
+
+
+<style>
+.player-card.touch-active, .player-card:active {
+  border-color: var(--gold) !important;
+  background: linear-gradient(180deg,#3a3a58 0%,#2c2c4a 100%) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 0 #000, 0 10px 24px rgba(230,162,60,.25), inset 0 1px 0 rgba(255,255,255,.1) !important;
+  transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, background 0.2s !important;
+}
+.ds-item.touch-active {
+  transform: translateY(-2px) scale(1.06) !important;
+  box-shadow: 0 4px 0 #15152a, 0 8px 18px rgba(230,162,60,.25) !important;
+}
+.g82-roster-card.touch-active {
+  transform: translateY(-2px) !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 4px 0 #15152a, 0 8px 18px rgba(230,162,60,.22) !important;
+}
+.g82-pool-card.touch-active {
+  border-color: var(--gold) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 5px 0 #15152a, 0 10px 24px rgba(230,162,60,.25) !important;
+}
+</style>
+<script>
+(function(){
+  var cls='touch-active';
+  function onDown(e){
+    var el=e.target.closest('.player-card,.ds-item,.g82-roster-card,.g82-pool-card');
+    if(el)el.classList.add(cls);
+  }
+  function onUp(e){
+    document.querySelectorAll('.'+cls).forEach(function(el){el.classList.remove(cls);});
+  }
+  document.addEventListener('touchstart',onDown,{passive:true});
+  document.addEventListener('touchend',onUp);
+  document.addEventListener('touchcancel',onUp);
+  document.addEventListener('mousedown',onDown);
+  document.addEventListener('mouseup',onUp);
+})();
+</script>
 
 </body>
 </html>
