@@ -249,13 +249,24 @@ tag.style.animationDelay = (0.2 + i * 0.05) + 's';
 document.getElementById('modalOverlay').style.display = 'flex';
 document.body.style.overflow = 'hidden';
 loadPhoto(p);
+lazyLoadHistory(function() {
 loadECharts().then(function() {
 NBA.renderChart(p);
 }).catch(function() {
 var cw = document.getElementById('chartWrapper');
 if (cw) cw.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">图表加载失败，请刷新重试</div>';
 });
+});
 };
+var _historyLoaded = false;
+function lazyLoadHistory(cb) {
+if (_historyLoaded) { cb(); return; }
+var s = document.createElement('script');
+s.src = 'player_history.js?v=20260726op';
+s.onload = function() { _historyLoaded = true; cb(); };
+s.onerror = function() { _historyLoaded = true; cb(); };
+document.head.appendChild(s);
+}
 function loadPhoto(p) {
 var portrait = document.getElementById('playerPortrait');
 if (!portrait) return;
