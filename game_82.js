@@ -59,7 +59,7 @@ function openGame() {
   var frame = document.getElementById('game82Frame');
   if (!overlay || !frame) return;
   if (frame.src.indexOf('game-82.html') === -1) {
-    frame.src = 'game-82.html?v=2';
+    frame.src = 'game-82.html?v=3';
   }
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
