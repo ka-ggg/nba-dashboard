@@ -1027,8 +1027,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC15',label:'征服联盟'});if(window.CONQUEST_API)CONQUEST_API.show();else alert('成就系统未加载')" class="btn-conquest">🏆 征服联盟</button>
       <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC16',label:'玩法说明'});showHelpModal()" class="btn-help">📖 玩法说明</button>
 
-      <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC20',label:'查看其他JRs建模'});viewOtherBuilds()" class="btn-help">👥 查看其他JRs建模</button>
-
     </div>
   </div>
 
@@ -1176,7 +1174,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   <img id="posterPreviewImg" alt="海报预览" style="max-width:100%;max-height:85vh;width:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
   <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center;">
     <button class="btn-share-poster" onclick="sharePoster(this)" style="min-height:44px;padding:12px 24px;border:none;border-radius:50px;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#ff6b35,#ff8a5c);color:#fff;box-shadow:0 8px 20px rgba(255,107,53,0.35);">💾 保存海报</button>
-    <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC19',label:'查看其他JRs建模'});viewOtherBuilds()" style="min-height:44px;padding:12px 24px;border:none;border-radius:50px;font-size:14px;font-weight:600;cursor:pointer;background:#444;color:#ccc;">👥 查看其他JRs建模</button>
     <button onclick="closePoster()" style="min-height:44px;padding:12px 24px;border:none;border-radius:50px;font-size:15px;font-weight:700;cursor:pointer;background:#555;color:#fff;">关闭</button>
   </div>
 </div>
@@ -1838,7 +1835,7 @@ var _helpPages = [
   { title: '建球员', content: '选择我的位置后进入抽签选队，随机抽取球队后从该队球员列表中选一人，点击左侧属性槽锁定一项属性。锁定后自动进入下一轮，可继续抽新球队选人锁属性。每局限换三次球员，用完只能重新随机球队。跨位置选人会触发属性衰减，集满十三项属性后自动揭晓总评、模板风格和相似球员。' },
   { title: '赛季', content: '抽签决定我的生涯球队后进入赛季。系统根据我与队内同位置球员的总评比较判定首发或替补。每场比赛可点单场推进，也可点击日历日期批量模拟到当天。比赛数据根据属性和位置动态生成，方差较大，有爆发也有低迷。赛季中可随时点我的数据查看场均表现。' },
   { title: '季后赛', content: '常规赛结束后根据排名决定季后赛或附加赛资格。附加赛在七到十名之间进行，逐场淘汰。季后赛每轮七场四胜，我的系列赛会一场一场模拟，每场生成简报。点击简报可展开查看详细比分、我的数据和全队数据。一路赢下去直到总冠军。' },
-  { title: '海报分享', content: '赛季结果页或我的数据页中点生成海报可生成球员纪念海报，包含总评、赛季数据、模板风格和最终属性。海报支持一键发帖到虎扑，也可查看其他用户创建的建模作品。每次发帖都会带上我的专属标签。' },
+  { title: '海报分享', content: '赛季结果页或我的数据页中点生成海报可生成球员纪念海报，包含总评、赛季数据、模板风格和最终属性。海报可保存为图片。每次发帖都会带上我的专属标签。' },
   { title: '征服联盟', content: '荣誉墙支持我挑战带领全部30支NBA球队夺冠的终极目标。每次我赢得总冠军，系统会自动记录该球队、赛季数据、季后赛数据以及我的最终属性和模板。已夺冠的球队会在荣誉墙上以金色边框和队标展示，点击可查看历次夺冠详情。' },
 ];
 
@@ -7306,12 +7303,6 @@ function generateBuildPlayerPoster() {
 // ── 关闭海报 ──
 function closePoster() {
   document.getElementById('posterOverlay').style.display = 'none';
-}
-
-// ── 查看其他JRs建模 ──
-function viewOtherBuilds() {
-  window.open('https://m.hupu.com/tag/' + POSTER_TAG_ID, '_blank');
-  closePoster();
 }
 
 // ── OSS 上传 ──
