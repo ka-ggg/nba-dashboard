@@ -74,39 +74,85 @@ document.querySelectorAll('.team-row,.ds-item').forEach(function(el) { el.classL
 document.getElementById('searchInput').value = '';
 renderAll();
 };
+var searchTimer = null;
 NBA.search = function() {
 var q = document.getElementById('searchInput').value.trim().toLowerCase();
+if (searchTimer) clearTimeout(searchTimer);
+searchTimer = setTimeout(function() {
 if (!q) { if (curTeam) renderTeam(curTeam); else renderAll(); return; }
 var f = P.filter(function(p) { return p.player.toLowerCase().indexOf(q) !== -1 || p.team.toLowerCase().indexOf(q) !== -1; });
-renderSearch(f);
+renderSearch(f, true);
+}, 120);
 };
 NBA.closeModal = function() {
-document.getElementById('modalOverlay').style.display = 'none';
+var overlay = document.getElementById('modalOverlay');
+if (overlay.classList.contains('closing')) return;
+overlay.classList.add('closing');
+setTimeout(function() {
+overlay.style.display = 'none';
+overlay.classList.remove('closing');
 document.body.style.overflow = '';
 if (sliderCleanup) { sliderCleanup(); sliderCleanup = null; }
 if (chartInst) { chartInst.dispose(); chartInst = null; }
+}, 200);
 };
 NBA.hideChartDetail = function() {
 var o = document.getElementById('chartDetailOverlay');
 if (o) o.classList.remove('show');
 };
+var isTransitioning = false;
+function animateContent(container) {
+var sections = container.querySelectorAll('.team-section');
+sections.forEach(function(sec, i) {
+sec.style.opacity = '0';
+sec.style.transform = 'translateY(10px)';
+setTimeout(function() { sec.style.opacity = ''; sec.style.transform = ''; }, i * 40 + 30);
+});
+var cards = container.querySelectorAll('.player-card');
+cards.forEach(function(card, i) {
+card.style.opacity = '0';
+card.style.transform = 'scale(0.92) translateY(6px)';
+var delay = Math.min(i * 0.018, 0.3);
+setTimeout(function() { card.style.opacity = ''; card.style.transform = ''; }, delay * 1000 + 50);
+});
+}
+function renderWithTransition(renderFn, skipFade) {
+var main = document.getElementById('mainContent');
+if (skipFade || isTransitioning) {
+renderFn();
+main.scrollTop = 0;
+animateContent(main);
+return;
+}
+isTransitioning = true;
+main.classList.add('fading');
+setTimeout(function() {
+renderFn();
+main.scrollTop = 0;
+main.classList.remove('fading');
+animateContent(main);
+isTransitioning = false;
+}, 180);
+}
 function renderAll() {
+renderWithTransition(function() {
 var h = '';
 T.forEach(function(t) { h += teamSection(t); });
 document.getElementById('mainContent').innerHTML = h || '<div class="empty-state"><h3>暂无数据</h3></div>';
-document.getElementById('mainContent').scrollTop = 0;
+});
 }
 function renderTeam(name) {
 var t = T.find(function(x) { return x.name === name; });
 if (!t) return;
+renderWithTransition(function() {
 document.getElementById('mainContent').innerHTML = teamSection(t);
-document.getElementById('mainContent').scrollTop = 0;
+});
 }
-function renderSearch(players) {
+function renderSearch(players, skipFade) {
+renderWithTransition(function() {
 var main = document.getElementById('mainContent');
 if (players.length === 0) {
 main.innerHTML = '<div class="empty-state"><div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><h3>未找到匹配的球员</h3><p>尝试使用其他关键词</p></div>';
-main.scrollTop = 0;
 return;
 }
 var g = {};
@@ -119,7 +165,7 @@ var tid = t ? t.id : 0;
 h += '<div class="team-section"><div class="team-header"><span class="th-logo"><img src="' + logoUrl(tid) + '" loading="lazy" decoding="async" onerror="this.src=\'' + logoSvg(tn.substring(0,2), 28) + '\'" alt="' + tn + '"></span><h2>' + tn + ' <span class="count">' + tp.length + '人</span></h2></div><div class="player-grid">' + tp.map(pCard).join('') + '</div></div>';
 });
 main.innerHTML = h;
-main.scrollTop = 0;
+}, skipFade);
 }
 function teamSection(t) {
 return '<div class="team-section"><div class="team-header"><span class="th-logo"><img src="' + logoUrl(t.id) + '" loading="lazy" decoding="async" onerror="this.src=\'' + logoSvg(t.name.substring(0,2), 28) + '\'" alt="' + t.name + '"></span><h2>' + t.name + ' <span class="count">' + t.count + '名球员</span></h2></div><div class="player-grid">' + t.players.map(pCard).join('') + '</div></div>';
@@ -192,6 +238,14 @@ body.innerHTML =
 '<div class="cs-labels"><span id="csLabelStart"></span><span id="csLabelEnd"></span></div>' +
 '</div>' +
 '</div>';
+var statCells = body.querySelectorAll('.player-info-card .stat-cell');
+statCells.forEach(function(cell, i) {
+cell.style.animationDelay = (i * 0.03) + 's';
+});
+var honorTags = body.querySelectorAll('.honor-tag');
+honorTags.forEach(function(tag, i) {
+tag.style.animationDelay = (0.2 + i * 0.05) + 's';
+});
 document.getElementById('modalOverlay').style.display = 'flex';
 document.body.style.overflow = 'hidden';
 loadPhoto(p);
@@ -424,13 +478,11 @@ document.getElementById('chartDetailGrid').innerHTML =
 overlay.classList.add('show');
 }
 });
-/* resize listener moved to module level */
+window.addEventListener('resize', function() { if (chartInst) chartInst.resize(); });
 };
 document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') { NBA.closeModal(); NBA.closeDrawer(); }
 });
-/* module-level resize handler: added once, not per-chart */
-window.addEventListener('resize', function() { if (chartInst) chartInst.resize(); });
 buildNavs();
 renderAll();
 })();
