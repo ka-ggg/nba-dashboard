@@ -12,7 +12,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="NBA王朝缔造者 · 82-0 完美赛季大挑战" />
   <meta property="og:description" content="组建王朝阵容，挑战82胜！" />
-  <meta property="og:image" content="https://mat1.gtimg.com/sports/nbadynasty/assets/share.png" />
+  <meta property="og:image" content="./assets/share.png" />
   <style>
     :root {
       /* 腾讯体育主视觉：体育蓝为品牌主色，橙色作强调点缀（深色球馆沉浸风） */
@@ -79,7 +79,7 @@
     /* 腾讯体育官方横版 logo（图标+反白文字），直接使用 assets/tx-logo.png，原图比例 1727x385 */
     .tx-logo-icon {
       display: block; height: 22px; width: calc(22px * 1727 / 385); flex: none;
-      background: url('https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png') left center / contain no-repeat;
+      background: url('./assets/tx-logo.png') left center / contain no-repeat;
     }
     .tx-tag { margin-left: auto; font-size: 11px; padding: 3px 8px; border: 1px solid var(--card-border); border-radius: 20px; color: var(--text-2); }
     /* 「NBA王朝缔造者」动感艺术字：金橙渐变 + 流光扫过 + 微倾斜 */
@@ -120,7 +120,7 @@
     }
     .brand-footer-icon {
       display: block; height: 16px; width: calc(16px * 1727 / 385); flex: none;
-      background: url('https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png') center / contain no-repeat;
+      background: url('./assets/tx-logo.png') center / contain no-repeat;
       opacity: .9;
     }
 
@@ -177,7 +177,7 @@
     }
     .home-brand-icon {
       display: block; height: 46px; width: calc(46px * 1727 / 385); flex: none;
-      background: url('https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png') center / contain no-repeat;
+      background: url('./assets/tx-logo.png') center / contain no-repeat;
       filter: drop-shadow(0 2px 10px rgba(0,0,0,.5));
     }
     .home-brand-text {
@@ -2739,8 +2739,8 @@ window.TEAMS = {
     s.innerHTML =
       '<div class="home-inner">' +
         '<div class="legend-stack">' +
-          '<div class="legend-stack-card"><img src="https://mat1.gtimg.com/sports/nbadynasty/assets/home-bg.png?v=20260623i" alt="全明星群星合影" loading="lazy"></div>' +
-          '<div class="legend-stack-card"><img src="https://mat1.gtimg.com/sports/nbadynasty/assets/legend-2.png" alt="全明星群星合影" loading="lazy"></div>' +
+          '<div class="legend-stack-card"><img src="./assets/home-bg.png?v=20260623i" alt="全明星群星合影" loading="lazy"></div>' +
+          '<div class="legend-stack-card"><img src="./assets/legend-2.png" alt="全明星群星合影" loading="lazy"></div>' +
         '</div>' +
         '<div class="hero-title">82-0</div>' +
         '<div class="hero-sub">誓不可挡，不败神话！</div>' +
@@ -3970,7 +3970,7 @@ window.TEAMS = {
 
     // 二维码（放在主打战术下方）
     var qrUrl2 = window.location.href.split('#')[0];
-    var qrImgSrc2 = qrUrl2.indexOf('mat1.gtimg.com') > -1 || qrUrl2.indexOf('tcloudbaseapp') > -1 ? './assets/qrcode.png' : 'https://mat1.gtimg.com/sports/nbadynasty/assets/qrcode.png';
+    var qrImgSrc2 = qrUrl2.indexOf('mat1.gtimg.com') > -1 || qrUrl2.indexOf('tcloudbaseapp') > -1 ? './assets/qrcode.png' : './assets/qrcode.png';
     s.appendChild(el(
       '<div class="qr-invite">' +
         '<div class="qr-left"><img class="qr-img" src="' + qrImgSrc2 + '" alt="扫码挑战"/><span class="qr-caption">扫码挑战82胜</span></div>' +
@@ -4069,15 +4069,15 @@ window.TEAMS = {
     var logoReady = false;
     logoImg.onload = function () { logoReady = true; doDraw(true); };
     logoImg.onerror = function () { logoReady = false; doDraw(true); };
-    fetch('https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png?v=20260623r')
+    fetch('./assets/tx-logo.png?v=20260623r')
       .then(function (resp) { return resp.blob(); })
       .then(function (blob) {
         var fr = new FileReader();
         fr.onload = function () { logoImg.src = fr.result; };       // dataURL，不污染 canvas
-        fr.onerror = function () { logoImg.src = 'https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png?v=20260623r'; };
+        fr.onerror = function () { logoImg.src = './assets/tx-logo.png?v=20260623r'; };
         fr.readAsDataURL(blob);
       })
-      .catch(function () { logoImg.src = 'https://mat1.gtimg.com/sports/nbadynasty/assets/tx-logo.png?v=20260623r'; });
+      .catch(function () { logoImg.src = './assets/tx-logo.png?v=20260623r'; });
 
     // useLogo=false 时强制不画图片（纯文字降级版），用于 canvas 被污染时兜底重画
     function doDraw(useLogo) {
