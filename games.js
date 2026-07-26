@@ -205,7 +205,7 @@ function openGame() {
   var frame = document.getElementById('gameDynastyFrame');
   if (!overlay || !frame) return;
   if (frame.src.indexOf('nbadynasty.html') === -1) {
-    frame.src = 'nbadynasty.html?v=2';
+    frame.src = 'nbadynasty.html?v=3';
   }
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
