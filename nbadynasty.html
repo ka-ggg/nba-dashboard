@@ -2926,8 +2926,8 @@ window.TEAMS = {
     draft.appendChild(actionWrap);
 
     var toolRow = el('<div class="tool-row" style="margin-top:12px"></div>');
-    var swapT = el('<button class="tool-btn" id="swap-team" disabled>🔄 更换球队（整局1次）</button>');
-    var swapD = el('<button class="tool-btn" id="swap-decade" disabled>🔄 更换年代（整局1次）</button>');
+    var swapT = el('<button class="tool-btn" id="swap-team" disabled>🔄 更换球队（无限次）</button>');
+    var swapD = el('<button class="tool-btn" id="swap-decade" disabled>🔄 更换年代（无限次）</button>');
     swapT.onclick = function () { doSwap('team'); };
     swapD.onclick = function () { doSwap('decade'); };
     toolRow.appendChild(swapT); toolRow.appendChild(swapD);
@@ -3011,21 +3011,19 @@ window.TEAMS = {
     });
   }
 
-  // 根据整局剩余次数，更新「更换球队 / 更换年代」按钮的可用状态与文案
+  // 更新「更换球队 / 更换年代」按钮的可用状态（无限次，不再限制使用次数）
   function updateSwapButtons() {
     var bt = document.getElementById('swap-team');
     var bd = document.getElementById('swap-decade');
     if (!bt || !bd) return;
     var hasDraw = !!state.currentDraw;
-    bt.disabled = !hasDraw || state.swapTeamUsed;
-    bd.disabled = !hasDraw || state.swapDecadeUsed;
-    bt.textContent = state.swapTeamUsed ? '✅ 已换过球队' : '🔄 更换球队（整局1次）';
-    bd.textContent = state.swapDecadeUsed ? '✅ 已换过年代' : '🔄 更换年代（整局1次）';
+    bt.disabled = !hasDraw;
+    bd.disabled = !hasDraw;
+    bt.textContent = '🔄 更换球队（无限次）';
+    bd.textContent = '🔄 更换年代（无限次）';
   }
 
   function doSwap(type) {
-    if (type === 'team' && state.swapTeamUsed) return;
-    if (type === 'decade' && state.swapDecadeUsed) return;
     var combo;
     if (type === 'team') {
       // 换球队：年代保持不变，只在「拥有当前年代」的其他球队里随机
@@ -3034,21 +3032,19 @@ window.TEAMS = {
         return t !== state.currentDraw.team && decadesOfTeam(t).indexOf(curDecade) >= 0;
       });
       if (!pool.length) { toast('没有其它球队拥有 ' + curDecade + ' 年代，无法换队'); return; }
-      state.swapTeamUsed = true;
       var nt = rand(pool);
       combo = { team: nt, decade: curDecade, candidates: window.TEAMS[nt].players[curDecade] };
     } else {
       // 换年代：球队保持不变，只换该队的其它年代
       var ds = decadesOfTeam(state.currentDraw.team).filter(function (d) { return d !== state.currentDraw.decade; });
       if (!ds.length) { toast('该球队只有 ' + state.currentDraw.decade + ' 一个年代，无法换年代'); return; }
-      state.swapDecadeUsed = true;
       var nd = rand(ds);
       combo = { team: state.currentDraw.team, decade: nd, candidates: window.TEAMS[state.currentDraw.team].players[nd] };
     }
     animateSlot(combo, function () {
       state.currentDraw = combo;
       updateSwapButtons();
-      toast(type === 'team' ? '已更换球队（整局仅此1次）' : '已更换年代（整局仅此1次）');
+      toast(type === 'team' ? '已更换球队（可无限更换）' : '已更换年代（可无限更换）');
       renderPicker();
     });
   }
