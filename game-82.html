@@ -520,147 +520,7 @@
   }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
-<!-- colorbox-ai SDK removed (Hupu-specific) -->
-<script>
-(function () {
-  var settings = {"ownerId":402116,"projectId":"project-ai-1781070826571","title":"82-0完美阵容大挑战","trackingCode":"PHBS7947","bizCategory":"match","shareTitle":"82-0完美阵容大挑战","shareSubtitle":"这里，不允许失败","shareCover":"game-share.png","theme":{"webviewBackground":"#ffffff","skeletonColor":"#edeef0","containerBackground":"#ffffff"},"dayNightMode":"auto"};
-  var projectId = "project-ai-1781070826571";
-  var pagePi = "activity_match_project-ai-1781070826571";
-  var sessionId = "ai-runtime-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-  window.__colorbox_runtime__ = true;
-  window.globalState = Object.assign({}, window.globalState || {}, {
-    name: settings.title,
-    pageTrackCode: settings.trackingCode,
-    wxShareTitle: settings.shareTitle,
-    wxShareSubTitle: settings.shareSubtitle,
-    wxShareImage: settings.shareCover,
-    bizCode: settings.bizCategory,
-    webViewColor: settings.theme && settings.theme.webviewBackground,
-    containerColor: settings.theme && settings.theme.containerBackground,
-    pi: pagePi
-  });
-  if (settings.title) {
-    document.title = settings.title;
-  }
-  function createLocalFallbackApi() {
-    return {
-      getPostDetail: function () {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      getPostReplyList: function () {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      getTopicThreads: function () {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      buildPostSchema: function () {
-        return "";
-      },
-      openPostEditor: function () {
-        return "";
-      }
-    };
-  }
-  var frameTrackDebugLog = [];
-  function pushFrameTrackDebug(stage, detail) {
-    var entry = { stage: stage, detail: detail || {}, ts: Date.now() };
-    frameTrackDebugLog.push(entry);
-    if (frameTrackDebugLog.length > 200) {
-      frameTrackDebugLog.shift();
-    }
-    try {
-      console.log("[ColorboxAI.Track] " + stage, detail || {});
-    } catch (error) {}
-  }
-  function createTrackTraceId() {
-    return "trk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
-  }
-  function post(type, payload) {
-    var trackTraceId = payload && payload.trackTraceId;
-    try {
-      if (!window.parent || window.parent === window) {
-        if (type === "events.track") {
-          pushFrameTrackDebug("frame.post.skip", {
-            trackTraceId: trackTraceId,
-            reason: "no_parent_or_same_window"
-          });
-        }
-        return;
-      }
-      window.parent.postMessage({
-        protocol: "colorbox-ai-bridge",
-        version: 1,
-        direction: "frame-to-host",
-        sessionId: sessionId,
-        projectId: projectId,
-        type: type,
-        payload: payload || {},
-        timestamp: Date.now()
-      }, "*");
-      if (type === "events.track") {
-        pushFrameTrackDebug("frame.post.ok", { trackTraceId: trackTraceId, projectId: projectId });
-      }
-    } catch (error) {
-      if (type === "events.track") {
-        pushFrameTrackDebug("frame.post.error", {
-          trackTraceId: trackTraceId,
-          message: error && error.message || String(error)
-        });
-      }
-    }
-  }
-  window.ColorboxAI = window.ColorboxAI || {};
-  window.ColorboxAI.project = window.ColorboxAI.project || {
-    id: projectId,
-    settings: settings,
-    getSettings: function () { return Promise.resolve(settings); }
-  };
-  if (typeof window.ColorboxAI.configure === "function") {
-    window.ColorboxAI.configure({
-      trackingCode: settings.trackingCode,
-      pi: pagePi
-    });
-  }
-  window.__colorbox_ai_track_debug_frame__ = frameTrackDebugLog;
-  window.ColorboxAI.track = function (trackParams) {
-    var trackTraceId = createTrackTraceId();
-    pushFrameTrackDebug("frame.call", {
-      trackTraceId: trackTraceId,
-      params: trackParams || {},
-      hasParent: !!(window.parent && window.parent !== window)
-    });
-    post("events.track", { trackParams: trackParams || {}, trackTraceId: trackTraceId });
-  };
-  window.ColorboxAI.navigateTo = function (url, target) {
-    console.log("[ColorboxAI.Navigation.Iframe] navigateTo called inside iframe. URL:", url, "Target:", target);
-    console.log("[ColorboxAI.Navigation.Iframe] Posting navigation.open event to parent Host shell.");
-    post("navigation.open", { url: url, target: target });
-  };
-  window.ColorboxAI.openUrl = window.ColorboxAI.navigateTo;
-  window.ColorboxAI.bbs = window.ColorboxAI.bbs || createLocalFallbackApi();
-  window.ColorboxAI.runtime = window.ColorboxAI.runtime || {};
-  window.ColorboxAI.runtime.log = function () {
-    post("runtime.log", { args: Array.prototype.slice.call(arguments) });
-  };
-  window.addEventListener("error", function (event) {
-    post("runtime.error", {
-      message: event.message,
-      sourceFile: event.filename,
-      line: event.lineno,
-      column: event.colno,
-      stack: event.error && event.error.stack
-    });
-  }, true);
-  window.addEventListener("unhandledrejection", function (event) {
-    var reason = event.reason || {};
-    post("runtime.error", {
-      message: reason.message || String(reason),
-      stack: reason.stack || ""
-    });
-  });
-  post("runtime.ready", { href: location.href });
-})();
-</script></head>
+</head>
 <body>
 
 <canvas id="particles-canvas"></canvas>
@@ -680,8 +540,8 @@
         谁能创造出82-0的完美阵容？
       </div>
       <div class="menu-buttons">
-        <button class="btn btn-primary" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC1',label:'开始游戏'});startGame()" style="width:260px;justify-content:center;">▶&nbsp; 开始游戏</button>
-        <button class="btn btn-secondary" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC2',label:'玩法说明'});toggleHowTo()" style="width:260px;justify-content:center;">📖 &nbsp;玩法说明</button>
+        <button class="btn btn-primary" onclick="startGame()" style="width:260px;justify-content:center;">▶&nbsp; 开始游戏</button>
+        <button class="btn btn-secondary" onclick="toggleHowTo()" style="width:260px;justify-content:center;">📖 &nbsp;玩法说明</button>
         <button class="btn btn-secondary btn-xs" onclick="testBestPlayers()" style="display:none;">⚡ 最强阵容</button>
       </div>
       <div class="how-to-box" id="howToBox" style="display:none;">
@@ -735,11 +595,11 @@
 
       <!-- Controls -->
       <div class="slot-controls">
-        <button class="btn btn-gold" id="spinBtn" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC4',label:'抽取'});spinSlot()">🎰&nbsp; 抽取</button>
+        <button class="btn btn-gold" id="spinBtn" onclick="spinSlot()">🎰&nbsp; 抽取</button>
       </div>
       <div class="slot-controls-row">
-        <button class="btn btn-secondary btn-xs" id="skipTeamBtn" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC5',label:'更换球队'});directSkip('team')" disabled>🔄 更换球队 <span id="skipTeamCount">1次</span></button>
-        <button class="btn btn-secondary btn-xs" id="skipDecadeBtn" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC6',label:'更换年代'});directSkip('decade')" disabled style="margin-left:8px;">🔄 更换年代 <span id="skipDecadeCount">1次</span></button>
+        <button class="btn btn-secondary btn-xs" id="skipTeamBtn" onclick="directSkip('team')" disabled>🔄 更换球队 <span id="skipTeamCount">1次</span></button>
+        <button class="btn btn-secondary btn-xs" id="skipDecadeBtn" onclick="directSkip('decade')" disabled style="margin-left:8px;">🔄 更换年代 <span id="skipDecadeCount">1次</span></button>
       </div>
 
     </div>
@@ -785,8 +645,8 @@
       <div class="roster-final" id="rosterFinal" style="margin-top:24px;"></div>
 
       <div style="margin-top:30px;display:flex;flex-direction:column;gap:12px;align-items:center;width:100%;">
-        <button class="btn btn-primary" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC7',label:'生成海报'});generatePoster()" style="width:220px;justify-content:center;background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 4px 20px rgba(124,58,237,0.4);">📷 生成海报</button>
-        <button class="btn btn-gold" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC8',label:'再来一局'});startGame()" style="width:220px;justify-content:center;">🔄 &nbsp;再来一局</button>
+        <button class="btn btn-primary" onclick="generatePoster()" style="width:220px;justify-content:center;background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 4px 20px rgba(124,58,237,0.4);">📷 生成海报</button>
+        <button class="btn btn-gold" onclick="startGame()" style="width:220px;justify-content:center;">🔄 &nbsp;再来一局</button>
       </div>
     </div>
   </div>
@@ -797,8 +657,8 @@
 <div id="posterOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
   <img id="posterPreviewImg" alt="海报预览" style="max-width:100%;max-height:75vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
   <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center;">
-    <button class="btn btn-primary" id="sharePosterBtn" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC10',label:'一键发帖'});sharePoster(this)" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 8px 20px rgba(124,58,237,0.35);color:#fff;">📤 一键发帖</button>
-    <button class="btn btn-secondary" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC11',label:'取消'});closePoster()">✕ 取消</button>
+    <button class="btn btn-primary" id="sharePosterBtn" onclick="sharePoster(this)" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 8px 20px rgba(124,58,237,0.35);color:#fff;">📤 一键发帖</button>
+    <button class="btn btn-secondary" onclick="closePoster()">✕ 取消</button>
   </div>
 </div>
 
@@ -808,8 +668,8 @@
     <h3 id="skipModalTitle">Skip?</h3>
     <p id="skipModalDesc">Are you sure you want to skip?</p>
     <div class="modal-buttons">
-      <button class="btn btn-primary" id="skipConfirmBtn" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC12',label:'是的，跳过'});executeSkip()">是的，跳过</button>
-      <button class="btn btn-secondary" onclick="window.ColorboxAI&&window.ColorboxAI.track({act:'click',blk:'BMC098',pos:'TC13',label:'取消'});closeSkipModal()">取消</button>
+      <button class="btn btn-primary" id="skipConfirmBtn" onclick="executeSkip()">是的，跳过</button>
+      <button class="btn btn-secondary" onclick="closeSkipModal()">取消</button>
     </div>
   </div>
 </div>
@@ -1870,12 +1730,6 @@ function testBestPlayers() {
 //  SAFE NAVIGATE & POSTER
 // ===================================================================
 function safeNavigate(url, target, eventName) {
-  if (window.ColorboxAI && typeof window.ColorboxAI.navigateTo === 'function') {
-    try { window.ColorboxAI.navigateTo(url, target || '_blank'); return; } catch(e) {}
-  }
-  if (window.ColorboxAI && typeof window.ColorboxAI.openUrl === 'function') {
-    try { window.ColorboxAI.openUrl(url); return; } catch(e) {}
-  }
   try { window.open(url, target || '_blank'); } catch(e) {}
 }
 
@@ -1940,15 +1794,6 @@ function drawPoster(ctx, w, h, players, record, grade, tier) {
   ctx.fillStyle = 'rgba(211,84,0,0.15)';
   ctx.fillRect(0, 0, w, 3);
 
-  // === Hupu logo (top-left) ===
-  if (window._hupuLogoImg && window._hupuLogoImg.complete && window._hupuLogoImg.naturalWidth > 0) {
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.08)';
-    ctx.shadowBlur = 4;
-    ctx.drawImage(window._hupuLogoImg, 22, 25, 76, 76);
-    ctx.restore();
-  }
-
   const recColor = record === '82-0' ? '#d35400' : record.split('-')[0] >= 70 ? '#27ae60' : record.split('-')[0] >= 50 ? '#e67e22' : '#e74c3c';
 
   // === Player cards (calculate first to center record group) ===
@@ -2010,7 +1855,7 @@ function drawPoster(ctx, w, h, players, record, grade, tier) {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(0,0,0,0.25)';
   ctx.font = '12px -apple-system, "PingFang SC", sans-serif';
-  ctx.fillText('虎扑JRs出品', w / 2, h - 32);
+  ctx.fillText('82-0 完美赛季', w / 2, h - 32);
 }
 
 function createPosterCanvasAsync() {
@@ -2024,25 +1869,12 @@ function createPosterCanvasAsync() {
   const ctx = canvas.getContext('2d');
   ctx.scale(POSTER_SCALE, POSTER_SCALE);
 
-  // Load Hupu logo if not already cached
-  const logoLoad = new Promise(resolve => {
-    if (window._hupuLogoImg && window._hupuLogoImg.complete && window._hupuLogoImg.naturalWidth > 0) {
-      resolve();
-    } else {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => { window._hupuLogoImg = img; resolve(); };
-      img.onerror = () => resolve();
-      img.src = 'game-logo.png';
-    }
-  });
-
-  return logoLoad.then(() => {
+  return new Promise(resolve => {
     const grade = game._posterGrade || '';
     const tier = game._posterTier || '';
     drawPoster(ctx, POSTER_W, POSTER_H, players, record, grade, tier);
     canvas._corsSafe = true;
-    return canvas;
+    resolve(canvas);
   });
 }
 
@@ -2078,58 +1910,26 @@ function sharePoster(btn) {
   if (blob.size === 0) return;
 
   const origText = btn.innerHTML;
-  btn.innerHTML = '⏳ 上传中...';
   btn.disabled = true;
 
   const filename = 'poster_82_0_' + Date.now() + '.png';
 
-  // Upload via colorbox bridge
-  function doUpload() {
-    return new Promise((resolve, reject) => {
-      if (window.parent && window.parent !== window) {
-        const callbackId = '_cb_up_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-        const timer = setTimeout(() => { cleanup(); reject(new Error('Upload timeout')); }, 30000);
-        const handler = e => {
-          const d = e.data;
-          if (d && d.protocol === 'colorbox-ai-bridge' && d.type === 'oss.upload.callback' && d.payload && d.payload.callbackId === callbackId) {
-            clearTimeout(timer); cleanup();
-            d.payload.error ? reject(new Error(d.payload.error)) : resolve(d.payload.downloadUrl || '');
-          }
-        };
-        const cleanup = () => window.removeEventListener('message', handler);
-        window.addEventListener('message', handler);
-        window.parent.postMessage({
-          protocol: 'colorbox-ai-bridge', version: 1, direction: 'frame-to-host',
-          type: 'oss.upload',
-          payload: { file: blob, filename, callbackId }
-        }, '*');
-      } else {
-        reject(new Error('No upload capability'));
-      }
-    });
-  }
-
-  doUpload().then(imageUrl => {
-    const initialValue = {
-      syncPost: true,
-      appJsonV3: {
-        activeTab: 'thread',
-        data: { title: '', imageList: imageUrl ? [imageUrl] : [], content: '' }
-      }
-    };
-    const postUrl = 'huputiyu://bbs/postImg?tagName=' + encodeURIComponent('82-0完美赛季') +
-      '&tagId=148405' +
-      '&topicName=' + encodeURIComponent('湿乎乎的话题') +
-      '&topicId=177' +
-      '&initialValue=' + encodeURIComponent(JSON.stringify(initialValue));
-    safeNavigate(postUrl, '_self', 'poster_share');
-    closePoster();
-  }).catch(e => {
-    console.warn('Poster upload failed', e);
-  }).finally(() => {
+  // Save poster locally
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) {
+    console.warn('Poster save failed', e);
+  } finally {
     btn.innerHTML = origText;
     btn.disabled = false;
-  });
+  }
 }
 
 // ===================================================================

@@ -31,9 +31,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .navbar{display:flex;align-items:center;justify-content:center;padding:14px 20px 10px;position:sticky;top:0;z-index:50;background:rgba(250,245,235,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .nav-logo{font-family:var(--font-display);font-size:clamp(17px,4.5vw,22px);font-weight:700;color:var(--text);letter-spacing:1px}
 .nav-logo .hl{color:var(--orange);font-size:1.1em}.nav-pos-toggle,.nav-pos-btn{display:none}
-.hp-brand{position:fixed;top:12px;right:12px;z-index:999;opacity:0.4;transition:opacity .2s;line-height:0}
-.hp-brand:hover{opacity:1}.hp-brand img{width:28px;height:28px;border-radius:6px;display:block}
-@media(max-width:560px){.hp-brand{top:10px;right:10px}.hp-brand img{width:24px;height:24px}}
 .hero{text-align:center;padding:min(5vh,40px)20px 20px;position:relative}
 .hero::after{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(255,107,53,0.06)0%,transparent 70%);pointer-events:none}
 .hero-title{font-family:var(--font-display);font-size:clamp(11px,3vw,14px);color:var(--orange);font-weight:700;letter-spacing:3px;margin-bottom:6px;text-transform:uppercase}
@@ -402,597 +399,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     @keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .section-card{opacity:0;animation:fadeInUp .8s ease forwards}
   </style>
-  <!-- 虎扑SDK已移除，使用内置fallback -->
-<script>
-(function () {
-  window.__COLORBOX_AI_CONFIG__ = {
-    projectId: "project-ai-1783761934042",
-    settings: {"ownerId":402116,"projectId":"project-ai-1783761934042","title":"我创造的完美球员","trackingCode":"PHBS7947","bizCategory":"match","shareTitle":"","shareSubtitle":"","shareCover":"","theme":{"webviewBackground":"#ffffff","skeletonColor":"#edeef0","containerBackground":"#ffffff"},"dayNightMode":"auto"},
-    pagePi: "activity_match_project-ai-1783761934042"
-  };
-  "use strict";
-(() => {
-  // src/iframe-runtime/fallbacks.ts
-  function createLocalFallbackApi() {
-    return {
-      getPostDetail: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      getTopicThreads: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      buildPostSchema: function() {
-        return "";
-      },
-      openPostEditor: function() {
-        return "";
-      }
-    };
-  }
-  function createLocalSecurityFallbackApi() {
-    return {
-      checkAudit: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      }
-    };
-  }
-  function createLocalScoreFallbackApi() {
-    return {
-      getScore: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      },
-      addScore: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      }
-    };
-  }
-  function createLocalOssFallbackApi() {
-    return {
-      uploadFile: function() {
-        return Promise.reject(new Error("ColorboxAI SDK is not loaded"));
-      }
-    };
-  }
-  function createLocalAuthFallbackApi() {
-    return {
-      getUserInfo: function() {
-        const info = window.userInfo || window.HupuBridge && window.HupuBridge.nainfo;
-        return Promise.resolve(info || null);
-      },
-      getAuthToken: function() {
-        const info = window.userInfo || window.HupuBridge && window.HupuBridge.nainfo;
-        const token = info && (info.authToken || info.token) || "";
-        return Promise.resolve(token);
-      }
-    };
-  }
-
-  // src/iframe-runtime/storage.ts
-  var MAX_STORAGE_BYTES = 5 * 1024 * 1024;
-  function createColorboxStorageApi(params) {
-    const pId = params.projectId;
-    function resolveScopedKey(key) {
-      return "cb_storage:" + pId + ":" + key;
-    }
-    function isStorageAvailable() {
-      try {
-        const testKey = "__colorbox_storage_test__";
-        window.localStorage.setItem(testKey, "test");
-        window.localStorage.removeItem(testKey);
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-    const isLocalAvailable = isStorageAvailable();
-    function safeB64Encode(str) {
-      try {
-        const base64 = window.btoa(unescape(encodeURIComponent(str)));
-        return base64;
-      } catch (error) {
-        logError("safeB64Encode failed.", error);
-        throw error;
-      }
-    }
-    function safeB64Decode(str) {
-      try {
-        const decoded = decodeURIComponent(escape(window.atob(str)));
-        return decoded;
-      } catch (error) {
-        logError("safeB64Decode failed.", error);
-        throw error;
-      }
-    }
-    function serializeStorageValue(value) {
-      if (value == null) return "";
-      const text = typeof value === "string" ? value : JSON.stringify(value);
-      try {
-        const encoded = safeB64Encode(text);
-        return "__b64__:" + encoded;
-      } catch (error) {
-        return text;
-      }
-    }
-    function parseStorageValue(value, scopedKey) {
-      if (value == null) return null;
-      if (typeof value !== "string") return value;
-      let text = value;
-      if (text.indexOf("__b64__:") === 0) {
-        text = safeB64Decode(text.slice(8));
-      }
-      if (text.charAt(0) !== "{" && text.charAt(0) !== "[") {
-        return text;
-      }
-      try {
-        const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === "object") {
-          if (!Array.isArray(parsed) && scopedKey && parsed[scopedKey] != null) {
-            return parseStorageValue(parsed[scopedKey], scopedKey);
-          }
-        }
-        return text;
-      } catch (parseError) {
-        if (text.charAt(0) === "{" && text.charAt(text.length - 1) === "}") {
-          const escapedKey = (scopedKey || "").replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-          const pattern = new RegExp('^\\{\\s*"' + (escapedKey || '[^"]+') + '"\\s*:\\s*"(.*)"\\s*\\}\\s*$');
-          const match = text.match(pattern);
-          if (match) {
-            let rawValue = match[1];
-            rawValue = rawValue.replace(/\\"/g, '"').replace(/\\\\/g, "\\");
-            return parseStorageValue(rawValue, scopedKey);
-          }
-        }
-        return text;
-      }
-    }
-    function readLocalStorageValue(scopedKey) {
-      if (!isLocalAvailable) return null;
-      try {
-        return parseStorageValue(window.localStorage.getItem(scopedKey), scopedKey);
-      } catch (e) {
-        return null;
-      }
-    }
-    function writeLocalStorageValue(scopedKey, value) {
-      if (!isLocalAvailable) return false;
-      try {
-        window.localStorage.setItem(scopedKey, serializeStorageValue(value));
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-    function readLocalStorageAll() {
-      const result = {};
-      if (!isLocalAvailable) return result;
-      try {
-        const prefix = "cb_storage:" + pId + ":";
-        for (let i = 0; i < window.localStorage.length; i++) {
-          const k = window.localStorage.key(i);
-          if (k && k.indexOf(prefix) === 0) {
-            const rawKey = k.substring(prefix.length);
-            const val = readLocalStorageValue(k);
-            if (val !== null) {
-              result[rawKey] = val;
-            }
-          }
-        }
-      } catch (e) {
-      }
-      return result;
-    }
-    function calculateStorageSize() {
-      let size = 0;
-      if (!isLocalAvailable) return size;
-      try {
-        const prefix = "cb_storage:" + pId + ":";
-        for (let i = 0; i < window.localStorage.length; i++) {
-          const k = window.localStorage.key(i);
-          if (k && k.indexOf(prefix) === 0) {
-            const val = window.localStorage.getItem(k);
-            size += k.length + (val ? val.length : 0);
-          }
-        }
-      } catch (e) {
-      }
-      return size;
-    }
-    function deleteLocalStorageValue(scopedKey) {
-      if (!isLocalAvailable) return false;
-      try {
-        window.localStorage.removeItem(scopedKey);
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-    function resolveProjectId() {
-      return pId;
-    }
-    function logInfo(stage, detail) {
-      console.log("[ColorboxAI.Storage] " + stage, detail || {});
-    }
-    function logError(stage, error) {
-      console.error("[ColorboxAI.Storage] Error: " + stage, error);
-    }
-    function shouldUseBridge() {
-      const ua = navigator.userAgent || "";
-      return /kanqiu/i.test(ua);
-    }
-    function writeBridgeValue(scopedKey, value) {
-      const payload = {
-        method: "hupu.common.setValue",
-        data: {
-          key: scopedKey,
-          value: serializeStorageValue(value)
-        }
-      };
-      return new Promise(function(resolve, reject) {
-        if (window.HupuBridge && typeof window.HupuBridge.send === "function") {
-          window.HupuBridge.send(payload.method, payload.data).then(resolve).catch(reject);
-        } else {
-          reject(new Error("HupuBridge not available for storage set"));
-        }
-      });
-    }
-    function readBridgeValue(scopedKey) {
-      const payload = {
-        method: "hupu.common.getValue",
-        data: { key: scopedKey }
-      };
-      return new Promise(function(resolve, reject) {
-        if (window.HupuBridge && typeof window.HupuBridge.send === "function") {
-          window.HupuBridge.send(payload.method, payload.data).then(function(res) {
-            const val = res && res.value;
-            resolve(parseStorageValue(val, scopedKey));
-          }).catch(reject);
-        } else {
-          reject(new Error("HupuBridge not available for storage get"));
-        }
-      });
-    }
-    function setValue(key, value) {
-      return Promise.resolve().then(function() {
-        if (key == null || typeof key === "object") {
-          const batch = key || {};
-          const keys = Object.keys(batch);
-          if (!keys.length) return { ok: true, size: calculateStorageSize(), bridgeSynced: false };
-          let currentSize2 = calculateStorageSize();
-          let delta2 = 0;
-          const writeTasks = [];
-          keys.forEach(function(k) {
-            const scopedKey2 = resolveScopedKey(k);
-            const val = batch[k];
-            const rawVal2 = JSON.stringify(val);
-            const oldRaw2 = isLocalAvailable ? window.localStorage.getItem(scopedKey2) : null;
-            const keyDelta = scopedKey2.length + rawVal2.length - (oldRaw2 ? scopedKey2.length + oldRaw2.length : 0);
-            delta2 += keyDelta;
-            writeTasks.push({ scopedKey: scopedKey2, val });
-          });
-          if (currentSize2 + delta2 > MAX_STORAGE_BYTES) {
-            throw new Error("Storage quota exceeded (max 5MB limit). Set value failed.");
-          }
-          let ok2 = true;
-          const bridgeKeys = [];
-          writeTasks.forEach(function(task) {
-            const success = writeLocalStorageValue(task.scopedKey, task.val);
-            if (!success) ok2 = false;
-            bridgeKeys.push(task.scopedKey);
-          });
-          if (shouldUseBridge()) {
-            const bridgePayload = {
-              method: "hupu.common.setValue",
-              data: {
-                keys: bridgeKeys,
-                values: keys.map(function(k) {
-                  return serializeStorageValue(batch[k]);
-                })
-              }
-            };
-            return new Promise(function(resolve) {
-              if (window.HupuBridge && typeof window.HupuBridge.send === "function") {
-                window.HupuBridge.send(bridgePayload.method, bridgePayload.data).then(function(res) {
-                  resolve({ ok: ok2, size: calculateStorageSize(), bridgeSynced: true, rawBridgeResult: res });
-                }).catch(function(err) {
-                  logError("Bridge batch write failed", err);
-                  resolve({ ok: ok2, size: calculateStorageSize(), bridgeSynced: false, error: err });
-                });
-              } else {
-                resolve({ ok: ok2, size: calculateStorageSize(), bridgeSynced: false });
-              }
-            }).then(function(result3) {
-              logInfo("\u5199\u5165\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-                projectId: resolveProjectId(),
-                input: batch,
-                payload: bridgePayload,
-                result: result3
-              });
-              return result3;
-            });
-          }
-          const result2 = { ok: ok2, size: calculateStorageSize(), bridgeSynced: false };
-          logInfo("\u5199\u5165\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-            projectId: resolveProjectId(),
-            input: batch,
-            payload: null,
-            result: result2
-          });
-          return result2;
-        }
-        const storageKey = String(key);
-        const scopedKey = resolveScopedKey(storageKey);
-        const rawVal = JSON.stringify(value);
-        const oldRaw = isLocalAvailable ? window.localStorage.getItem(scopedKey) : null;
-        const currentSize = calculateStorageSize();
-        const delta = scopedKey.length + rawVal.length - (oldRaw ? scopedKey.length + oldRaw.length : 0);
-        if (currentSize + delta > MAX_STORAGE_BYTES) {
-          throw new Error("Storage quota exceeded (max 5MB limit). Set value failed.");
-        }
-        let ok = true;
-        if (value === void 0) {
-          ok = deleteLocalStorageValue(scopedKey);
-        } else {
-          ok = writeLocalStorageValue(scopedKey, value);
-        }
-        if (shouldUseBridge()) {
-          const bridgePayload = {
-            method: "hupu.common.setValue",
-            data: {
-              key: scopedKey,
-              value: serializeStorageValue(value)
-            }
-          };
-          return writeBridgeValue(scopedKey, value).then(function(bridgeResult) {
-            return { ok, key: storageKey, size: calculateStorageSize(), bridgeSynced: bridgeResult !== null };
-          }).catch(function(err) {
-            logError("Bridge write failed for key " + storageKey, err);
-            return { ok, key: storageKey, size: calculateStorageSize(), bridgeSynced: false, error: err };
-          }).then(function(result2) {
-            logInfo("\u5199\u5165\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-              projectId: resolveProjectId(),
-              input: value,
-              payload: bridgePayload,
-              result: result2
-            });
-            return result2;
-          });
-        }
-        const result = { ok, key: storageKey, size: calculateStorageSize(), bridgeSynced: false };
-        logInfo("\u5199\u5165\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-          projectId: resolveProjectId(),
-          input: value,
-          payload: null,
-          result
-        });
-        return result;
-      }).catch(function(error) {
-        logError("\u5199\u5165\u5B58\u50A8\u6570\u636E\u5931\u8D25", error);
-        return Promise.reject(error);
-      });
-    }
-    function getValue(key) {
-      const hasKey = key != null && key !== "";
-      const storageKey = hasKey ? String(key) : "";
-      return Promise.resolve().then(function() {
-        if (!hasKey) {
-          const allValues = readLocalStorageAll();
-          logInfo("\u8BFB\u53D6\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-            projectId: resolveProjectId(),
-            key: "",
-            scopedKey: "",
-            source: "localStorage",
-            result: allValues
-          });
-          return allValues;
-        }
-        const scopedKey = resolveScopedKey(storageKey);
-        if (!shouldUseBridge()) {
-          const localOnlyValue = readLocalStorageValue(scopedKey);
-          logInfo("\u8BFB\u53D6\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-            projectId: resolveProjectId(),
-            key: storageKey,
-            scopedKey,
-            source: "localStorage",
-            result: localOnlyValue
-          });
-          return localOnlyValue;
-        }
-        return readBridgeValue(scopedKey).then(function(bridgeValue) {
-          if (bridgeValue != null) {
-            logInfo("\u8BFB\u53D6\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-              projectId: resolveProjectId(),
-              key: storageKey,
-              scopedKey,
-              source: "hupu.common.getValue",
-              result: bridgeValue
-            });
-            return bridgeValue;
-          }
-          const localValue = readLocalStorageValue(scopedKey);
-          logInfo("\u8BFB\u53D6\u5B58\u50A8\u6570\u636E\u6210\u529F", {
-            projectId: resolveProjectId(),
-            key: storageKey,
-            scopedKey,
-            source: "localStorage",
-            result: localValue
-          });
-          return localValue;
-        });
-      }).catch(function(error) {
-        logError("\u8BFB\u53D6\u5B58\u50A8\u6570\u636E\u5931\u8D25", error);
-        return hasKey ? null : {};
-      });
-    }
-    return {
-      maxBytes: MAX_STORAGE_BYTES,
-      setValue,
-      getValue,
-      set: setValue,
-      get: getValue
-    };
-  }
-
-  // src/iframe-runtime/index.ts
-  (function() {
-    const config = window.__COLORBOX_AI_CONFIG__ || {
-      projectId: "",
-      settings: {
-        title: "",
-        trackingCode: "",
-        bizCategory: "",
-        shareTitle: "",
-        shareSubtitle: "",
-        shareCover: ""
-      },
-      pagePi: ""
-    };
-    const { settings, projectId, pagePi } = config;
-    const sessionId = "ai-runtime-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-    window.__colorbox_runtime__ = true;
-    window.__colorbox_ai_runtime__ = true;
-    window.globalState = Object.assign({}, window.globalState || {}, {
-      name: settings.title,
-      pageTrackCode: settings.trackingCode,
-      wxShareTitle: settings.shareTitle,
-      wxShareSubTitle: settings.shareSubtitle,
-      wxShareImage: settings.shareCover,
-      bizCode: settings.bizCategory,
-      webViewColor: settings.theme && settings.theme.webviewBackground,
-      containerColor: settings.theme && settings.theme.containerBackground,
-      pi: pagePi
-    });
-    if (settings.title) {
-      document.title = settings.title;
-    }
-    function setupRuntimeIssueGuard() {
-      if (window.__colorbox_ai_runtime_issue_guard__) return;
-      window.__colorbox_ai_runtime_issue_guard__ = true;
-      let lastTick = Date.now();
-      window.setInterval(function() {
-        const now = Date.now();
-        const drift = now - lastTick - 1e3;
-        if (drift > 3e3) {
-          console.error("[ColorboxAI.Runtime] Main thread blocked for " + drift + "ms; possible long task or infinite loop.");
-        }
-        lastTick = now;
-      }, 1e3);
-    }
-    const frameTrackDebugLog = [];
-    function pushFrameTrackDebug(stage, detail) {
-      const entry = { stage, detail: detail || {}, ts: Date.now() };
-      frameTrackDebugLog.push(entry);
-      if (frameTrackDebugLog.length > 200) {
-        frameTrackDebugLog.shift();
-      }
-      try {
-        console.log("[ColorboxAI.Track] " + stage, detail || {});
-      } catch (error) {
-      }
-    }
-    function createTrackTraceId() {
-      return "trk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
-    }
-    function post(type, payload) {
-      const trackTraceId = payload && payload.trackTraceId;
-      try {
-        if (!window.parent || window.parent === window) {
-          if (type === "events.track") {
-            pushFrameTrackDebug("frame.post.skip", {
-              trackTraceId,
-              reason: "no_parent_or_same_window"
-            });
-          }
-          return;
-        }
-        window.parent.postMessage({
-          protocol: "colorbox-ai-bridge",
-          version: 1,
-          direction: "frame-to-host",
-          sessionId,
-          projectId,
-          type,
-          payload: payload || {},
-          timestamp: Date.now()
-        }, "*");
-        if (type === "events.track") {
-          pushFrameTrackDebug("frame.post.ok", { trackTraceId, projectId });
-        }
-      } catch (error) {
-        if (type === "events.track") {
-          pushFrameTrackDebug("frame.post.error", {
-            trackTraceId,
-            message: error && error.message || String(error)
-          });
-        }
-      }
-    }
-    window.ColorboxAI = window.ColorboxAI || {};
-    window.ColorboxAI.project = window.ColorboxAI.project || {
-      id: projectId,
-      settings,
-      getSettings: function() {
-        return Promise.resolve(settings);
-      }
-    };
-    if (typeof window.ColorboxAI.configure === "function") {
-      window.ColorboxAI.configure({
-        trackingCode: settings.trackingCode,
-        pi: pagePi
-      });
-    }
-    window.__colorbox_ai_track_debug_frame__ = frameTrackDebugLog;
-    window.ColorboxAI.track = function (trackParams) {
-      const trackTraceId = createTrackTraceId();
-      pushFrameTrackDebug("frame.call", {
-        trackTraceId,
-        params: trackParams || {},
-        hasParent: !!(window.parent && window.parent !== window)
-      });
-      post("events.track", { trackParams: trackParams || {}, trackTraceId });
-    };
-    window.ColorboxAI.navigateTo = function(url, target) {
-      post("navigation.open", { url, target });
-    };
-    window.ColorboxAI.openUrl = window.ColorboxAI.navigateTo;
-    window.ColorboxAI.bbs = window.ColorboxAI.bbs || createLocalFallbackApi();
-    window.ColorboxAI.security = window.ColorboxAI.security || createLocalSecurityFallbackApi();
-    window.ColorboxAI.score = window.ColorboxAI.score || createLocalScoreFallbackApi();
-    window.ColorboxAI.oss = window.ColorboxAI.oss || createLocalOssFallbackApi();
-    window.ColorboxAI.auth = window.ColorboxAI.auth || createLocalAuthFallbackApi();
-    window.ColorboxAI.storage = window.ColorboxAI.storage || createColorboxStorageApi({ projectId });
-    window.ColorboxAI.runtime = window.ColorboxAI.runtime || {};
-    window.ColorboxAI.runtime.log = function() {
-      post("runtime.log", { args: Array.prototype.slice.call(arguments) });
-    };
-    window.addEventListener("error", function(event) {
-      if (event.target && event.target !== window && event.target !== document) {
-        return;
-      }
-      const errorMsg = event.message || event.error && event.error.message || "Unknown error";
-      console.error("[ColorboxAI.Runtime] Uncaught error:", errorMsg);
-      post("runtime.error", {
-        message: errorMsg,
-        sourceFile: event.filename || "",
-        line: event.lineno || 0,
-        column: event.colno || 0,
-        stack: event.error && event.error.stack || ""
-      });
-    }, true);
-    window.addEventListener("unhandledrejection", function(event) {
-      const reason = event.reason || {};
-      console.error("[ColorboxAI.Runtime] Unhandled promise rejection:", reason);
-      post("runtime.error", {
-        message: reason.message || String(reason),
-        stack: reason.stack || ""
-      });
-    });
-    setupRuntimeIssueGuard();
-    post("runtime.ready", { href: location.href });
-  })();
-})();
-
-})();
-</script></head>
+</head>
 <body>
 
 <div id="app">
@@ -1024,8 +431,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     <div class="fc-footer"></div>
 
     <div class="debug-btn" style="margin-top:6px">
-      <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC15',label:'征服联盟'});if(window.CONQUEST_API)CONQUEST_API.show();else alert('成就系统未加载')" class="btn-conquest">🏆 征服联盟</button>
-      <button onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC16',label:'玩法说明'});showHelpModal()" class="btn-help">📖 玩法说明</button>
+      <button onclick="if(window.CONQUEST_API)CONQUEST_API.show();else alert('成就系统未加载')" class="btn-conquest">🏆 征服联盟</button>
+      <button onclick="showHelpModal()" class="btn-help">📖 玩法说明</button>
 
     </div>
   </div>
@@ -1047,16 +454,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
     </div>
   </div>
 
-  <!-- ====== 下载引导弹窗 ====== -->
-  <div id="downloadModal" class="modal-overlay" style="display:none;">
-    <div class="modal-content" style="text-align:center;padding:40px 24px 32px;max-width:320px;">
-      <div style="font-size:48px;margin-bottom:16px;">🏀</div>
-      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">请在虎扑App内打开</div>
-      <div style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:24px;">游戏需要虎扑App环境<br>下载后即可开始建模</div>
-      <button onclick="window.ColorboxAI?.navigateTo('https://games.mobileapi.hupu.com/landing?auto_install=yes&channel=build', '_blank')" style="display:block;width:100%;padding:14px 0;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:var(--font-display);font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 4px 0 #c94d1e,0 6px 12px rgba(255,107,53,0.25);cursor:pointer;">📲 下载虎扑</button>
-      <button onclick="document.getElementById('downloadModal').style.display='none'" style="margin-top:16px;padding:10px 0;width:100%;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;background:var(--bg-card);color:var(--text-dim);border:2px solid var(--border);font-family:var(--font-body);">关闭</button>
-    </div>
-  </div>
 
   <!-- ====== 位置选择 ====== -->
   <div class="screen" id="screen-position">
@@ -1065,7 +462,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       <div class="sub">现役模式 · 自选位置</div>
     </div>
     <div class="pos-grid" id="pos-grid"></div>
-    <button class="btn btn-primary" onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC2',label:'确认位置'});confirmPosition()">确认位置</button>
+    <button class="btn btn-primary" onclick="confirmPosition()">确认位置</button>
   </div>
 
   <!-- ====== 建球员 ====== -->
@@ -1166,7 +563,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 
 </div>
 
-<!-- 虎扑品牌logo已移除 -->
+
 
 <!-- ====== 海报弹窗 ====== -->
 <canvas id="posterCanvas" style="display:none"></canvas>
@@ -1282,210 +679,21 @@ function getPlayerHeadshotStyle(playerName, displaySize) {
 </script>
 <script src="bp-data-7.js"></script>
 <script>
-// == use-va-h5-sdk：虎扑用户信息只请求一次 ==
-var DEFAULT_HUPU_AVATAR = 'https://i3.hoopchina.com.cn/newsPost/de00f9a83014c2b3196d831d4be1adb9_w_300_h_300_.png';
-var DEFAULT_HUPU_NICKNAME = '未登录JR';
-var HUPU_USER = {
-  requested: false,
-  loaded: false,
-  promise: null,
-  raw: null,
-  isLogin: false,
-  nickname: DEFAULT_HUPU_NICKNAME,
-  avatar: DEFAULT_HUPU_AVATAR,
-  source: 'fallback',
-  requestCount: 0
-};
-window.__HUPU_USER__ = HUPU_USER;
-
-function parseHupuMaybeJson(value) {
-  if (typeof value !== 'string') return value;
-  var text = value.trim();
-  if (!text || (!text.startsWith('{') && !text.startsWith('['))) return value;
-  try { return JSON.parse(text); } catch (e) { return value; }
+// == local user system ==
+function ensureLocalUser() {
+  return Promise.resolve({ loaded: true, isLogin: true });
 }
 
-function normalizeHupuAvatarUrl(value) {
-  if (value === undefined || value === null) return '';
-  var url = String(value).trim();
-  if (!url) return '';
-  if (url.startsWith('//')) url = 'https:' + url;
-  if (/^data:image\//i.test(url) || /^https?:\/\//i.test(url)) return url;
-  return '';
-}
-
-function findHupuField(raw, keys, depth, seen) {
-  if (depth === undefined) depth = 0;
-  if (seen === undefined) seen = new Set();
-  raw = parseHupuMaybeJson(raw);
-  if (!raw || depth > 7 || typeof raw !== 'object' || seen.has(raw)) return undefined;
-  seen.add(raw);
-  var keyMap = new Map(Object.keys(raw).map(function(key) { return [key.toLowerCase(), key]; }));
-  for (var wi = 0; wi < keys.length; wi++) {
-    var wanted = keys[wi];
-    var actual = keyMap.get(String(wanted).toLowerCase());
-    if (!actual) continue;
-    var value = parseHupuMaybeJson(raw[actual]);
-    if (value !== undefined && value !== null && value !== '') return value;
-  }
-  var objKeys = Object.keys(raw);
-  for (var oi = 0; oi < objKeys.length; oi++) {
-    var found = findHupuField(raw[objKeys[oi]], keys, depth + 1, seen);
-    if (found !== undefined && found !== null && found !== '') return found;
-  }
-  return undefined;
-}
-
-function findHupuString(raw, keys) {
-  var value = findHupuField(raw, keys);
-  if (typeof value === 'string' || typeof value === 'number') return String(value).trim();
-  if (value && typeof value === 'object') {
-    var nested = findHupuField(value, ['url', 'src', 'value', 'text', 'name']);
-    if (typeof nested === 'string' || typeof nested === 'number') return String(nested).trim();
-  }
-  return '';
-}
-
-function normalizeHupuUserInfo(userInfo) {
-  var raw = parseHupuMaybeJson(userInfo) || {};
-  var nickname = findHupuString(raw, ['nickname', 'nickName', 'nick', 'userName', 'username', 'displayName', 'display_name']);
-  var avatarValue = findHupuField(raw, [
-    'avatar', 'avatarUrl', 'avatar_url', 'userAvatar', 'userAvatarUrl', 'head', 'header', 'headerUrl', 'headUrl',
-    'headImg', 'headImgUrl', 'headimgurl', 'profileImg', 'profileImage', 'profileImageUrl', 'profilePic', 'profilePicUrl',
-    'face', 'faceUrl', 'icon', 'iconUrl', 'photo', 'photoUrl', 'img', 'imgUrl', 'image', 'imageUrl', 'smallAvatar', 'bigAvatar'
-  ]);
-  if (avatarValue && typeof avatarValue === 'object')
-    avatarValue = findHupuField(avatarValue, ['url', 'src', 'imageUrl', 'avatarUrl']);
-  var avatar = normalizeHupuAvatarUrl(avatarValue);
-  var loginValue = findHupuField(raw, ['islogin', 'isLogin', 'loggedIn', 'login', 'hasLogin']);
-  var explicitlyLoggedIn = loginValue === 1 || loginValue === '1' || loginValue === true || loginValue === 'true' || loginValue === 'yes';
-  var isLogin = explicitlyLoggedIn || !!nickname || !!avatar;
-  return {
-    isLogin: isLogin,
-    nickname: isLogin && nickname ? nickname : DEFAULT_HUPU_NICKNAME,
-    avatar: avatar || DEFAULT_HUPU_AVATAR,
-    raw: userInfo || null
-  };
-}
-
-function getInjectedVaUserInfo() {
-  var candidates = [
-    window.__HUPU_USER_INFO__, window.__USER_INFO__, window.hupuUserInfo, window.userInfo,
-    window.VaFuSDK && window.VaFuSDK.userInfo, window.VaFuSDK && window.VaFuSDK.currentUser, window.VaFuSDK && window.VaFuSDK.user && window.VaFuSDK.user.info
-  ];
-  for (var ci = 0; ci < candidates.length; ci++) {
-    var value = parseHupuMaybeJson(candidates[ci]);
-    if (value && typeof value === 'object') return value;
-  }
-  return null;
-}
-
-function getVaUserInfoGetter() {
-  var candidates = [
-    [window.VaFuSDK, 'getUserInfo', 'VaFuSDK.getUserInfo'],
-    [window.VaFuSDK, 'getCurrentUser', 'VaFuSDK.getCurrentUser'],
-    [window.VaFuSDK, 'getUserProfile', 'VaFuSDK.getUserProfile'],
-    [window.VaFuSDK && window.VaFuSDK.user, 'getUserInfo', 'VaFuSDK.user.getUserInfo']
-  ];
-  for (var gi = 0; gi < candidates.length; gi++) {
-    var owner = candidates[gi][0], key = candidates[gi][1], label = candidates[gi][2];
-    if (owner && typeof owner[key] === 'function') return { owner: owner, fn: owner[key], label: label };
-  }
-  return null;
-}
-
-function waitForVaUserBridge(timeout) {
-  if (timeout === undefined) timeout = 8000;
-  var started = Date.now();
-  return new Promise(function(resolve) {
-    function check() {
-      var injected = getInjectedVaUserInfo();
-      if (injected) { resolve({ injected: injected }); return; }
-      var getter = getVaUserInfoGetter();
-      if (getter) { resolve({ getter: getter }); return; }
-      if (Date.now() - started < timeout) {
-        setTimeout(check, 120);
-      } else {
-        var finalInjected = getInjectedVaUserInfo();
-        if (finalInjected) { resolve({ injected: finalInjected }); return; }
-        var finalGetter = getVaUserInfoGetter();
-        resolve(finalGetter ? { getter: finalGetter } : null);
-      }
-    }
-    check();
-  });
-}
-
-function invokeVaUserInfoGetter(getter, timeout) {
-  if (timeout === undefined) timeout = 5000;
-  return new Promise(function(resolve, reject) {
-    if (!getter) { resolve(null); return; }
-    var settled = false;
-    function finish(value) { if (settled) return; settled = true; clearTimeout(timer); resolve(value); }
-    function fail(error) { if (settled) return; settled = true; clearTimeout(timer); reject(error); }
-    function callback() {
-      if (arguments.length > 1 && arguments[1] !== undefined && arguments[1] !== null) finish(arguments[1]);
-      else finish(arguments[0]);
-    }
-    var timer = setTimeout(function() { finish(null); }, timeout);
-    try {
-      HUPU_USER.requestCount += 1;
-      var returned = getter.fn.length > 0 ? getter.fn.call(getter.owner, callback) : getter.fn.call(getter.owner);
-      if (returned && typeof returned.then === 'function') returned.then(finish, fail);
-      else if (returned !== undefined && returned !== null) finish(returned);
-    } catch (e) { fail(e); }
-  });
-}
-
-async function _fetchHupuUser() {
-  try {
-    var bridge = await waitForVaUserBridge(8000);
-    var raw = null;
-    if (bridge && bridge.injected) { raw = bridge.injected; HUPU_USER.source = 'VaFuSDK.injected'; }
-    else if (bridge && bridge.getter) { raw = await invokeVaUserInfoGetter(bridge.getter, 5000); HUPU_USER.source = bridge.getter.label; }
-    var normalized = normalizeHupuUserInfo(raw);
-    HUPU_USER.raw = normalized.raw;
-    HUPU_USER.isLogin = normalized.isLogin;
-    HUPU_USER.nickname = normalized.nickname;
-    HUPU_USER.avatar = normalized.avatar;
-    try { console.log('[hupu]', normalized.isLogin ? '已登录' : '未登录', normalized.nickname, HUPU_USER.source); } catch(e) {}
-  } catch (e) {
-    HUPU_USER.isLogin = false;
-    HUPU_USER.nickname = DEFAULT_HUPU_NICKNAME;
-    HUPU_USER.avatar = DEFAULT_HUPU_AVATAR;
-    HUPU_USER.source = 'fallback_error';
-  } finally {
-    HUPU_USER.loaded = true;
-  }
-  return HUPU_USER;
-}
-
-var _hupuRetryCount = 0;
-function ensureHupuUser(forceRetry) {
-  // 强制重试：之前已加载但未登录，或加载超时
-  if (forceRetry) {
-    if (HUPU_USER.isLogin || _hupuRetryCount >= 3) return Promise.resolve(HUPU_USER);
-    _hupuRetryCount++;
-    HUPU_USER.loaded = false;
-    HUPU_USER.requested = true;
-    HUPU_USER.promise = _fetchHupuUser();
-    return HUPU_USER.promise;
-  }
-  if (HUPU_USER.loaded) return Promise.resolve(HUPU_USER);
-  if (!HUPU_USER.requested) { HUPU_USER.requested = true; HUPU_USER.promise = _fetchHupuUser(); }
-  return HUPU_USER.promise;
-}
-
-function getHupuDisplayName() {
+function getDisplayName() {
   var custom = getCustomPlayerName();
   if (custom) return custom;
-  return (HUPU_USER.isLogin && HUPU_USER.nickname) ? HUPU_USER.nickname : '自建球员';
+  return '玩家';
 }
-function getHupuAvatarUrl() {
-  return HUPU_USER.avatar || '';
+function getAvatarUrl() {
+  try { return localStorage.getItem('buildplayer_avatar') || ''; } catch(e) { return ''; }
 }
-function isHupuLoggedIn() {
-  return !!HUPU_USER.isLogin;
+function isLoggedIn() {
+  return true;
 }
 
 function getCustomPlayerName() {
@@ -1498,9 +706,9 @@ function setCustomPlayerName(name) {
 function openEditProfile() {
   var existing = document.getElementById('editProfileModal');
   if (existing) existing.remove();
-  var currentName = getHupuDisplayName();
-  var avatarUrl = getHupuAvatarUrl();
-  var defaultAvatar = 'https://i3.hoopchina.com.cn/newsPost/de00f9a83014c2b3196d831d4be1adb9_w_300_h_300_.png';
+  var currentName = getDisplayName();
+  var avatarUrl = getAvatarUrl();
+  var defaultAvatar = '';
   var M = document.createElement('div');
   M.id = 'editProfileModal';
   M.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:16px;';
@@ -1559,63 +767,15 @@ function saveEditProfile() {
     var m = document.getElementById('editProfileModal');
     if (m) m.remove();
   }
-  if (window.ColorboxAI && window.ColorboxAI.security && typeof window.ColorboxAI.security.checkAudit === 'function') {
-    try{console.log('[edit] checkAudit available, calling...')}catch(e){}
-    var timedOut = false;
-    var timer = setTimeout(function() { timedOut = true; try{console.warn('[edit] checkAudit timeout')}catch(e){} doSave(); }, 1000);
-    try {
-      var p = window.ColorboxAI.security.checkAudit(name);
-      if (p && typeof p.then === 'function') {
-        p.then(function(res) {
-          if (timedOut) return;
-          clearTimeout(timer);
-          try{console.log('[edit] checkAudit result', res)}catch(e){}
-          if (res && res.code === 200 && res.data === true) {
-            doSave();
-          } else if (res && res.code === 401) {
-            alert('请先登录');
-          } else if (res && res.data === false) {
-            alert('检测到敏感词');
-          } else {
-            try{console.warn('[edit] checkAudit unexpected', res)}catch(e){}
-            alert('安全检查异常，请稍后再试');
-          }
-        }).catch(function(e) {
-          if (timedOut) return;
-          clearTimeout(timer);
-          try{console.warn('[edit] checkAudit promise error', e)}catch(ex){}
-          doSave();
-        });
-      } else {
-        clearTimeout(timer);
-        try{console.warn('[edit] checkAudit not promise, fallback')}catch(e){}
-        doSave();
-      }
-    } catch(e) {
-      clearTimeout(timer);
-      try{console.warn('[edit] checkAudit sync error', e)}catch(ex){}
-      doSave();
-    }
-  } else {
-    try{console.warn('[edit] checkAudit unavailable, save directly')}catch(e){}
-    doSave();
-  }
+  doSave();
 }
 </script>
 <script>
-// ── Storage 工具 ──
+// -- Storage (local localStorage) --
 var Storage = {
   _ready: null,
   waitForReady: function(cb) {
-    if (!Storage._ready) {
-      Storage._ready = new Promise(function(resolve) {
-        function check() {
-          if (window.ColorboxAI && window.ColorboxAI.storage) { resolve(); return; }
-          setTimeout(check, 100);
-        }
-        check();
-      });
-    }
+    if (!Storage._ready) { Storage._ready = Promise.resolve(); }
     if (typeof cb === 'function') { Storage._ready.then(cb).catch(function(){}); }
     return Storage._ready;
   },
@@ -1626,29 +786,40 @@ var Storage = {
   },
   setValue: function(data) {
     try {
-      if (!window.ColorboxAI || !window.ColorboxAI.storage) return Promise.resolve();
       for (var key in data) {
         if (!data.hasOwnProperty(key)) continue;
         if (!Storage._validateKey(key)) { return Promise.resolve(); }
       }
       var serialized = JSON.stringify(data);
-      if (serialized.length > 200 * 1024) {
-        return Promise.resolve();
+      if (serialized.length > 200 * 1024) { return Promise.resolve(); }
+      for (var k in data) {
+        if (!data.hasOwnProperty(k)) continue;
+        try { localStorage.setItem('bp:' + k, JSON.stringify(data[k])); } catch(e) {}
       }
-      return window.ColorboxAI.storage.setValue(data).catch(function(){});
+      return Promise.resolve();
     } catch(e) {}
     return Promise.resolve();
   },
   getValue: function(key) {
     try {
-      if (!window.ColorboxAI || !window.ColorboxAI.storage) return Promise.resolve(null);
       if (key !== undefined && !Storage._validateKey(key)) return Promise.resolve(null);
-      if (key === undefined) return window.ColorboxAI.storage.getValue().catch(function(){ return null; });
-      return window.ColorboxAI.storage.getValue(key).catch(function(){ return null; });
+      if (key === undefined) {
+        var all = {};
+        for (var i = 0; i < localStorage.length; i++) {
+          var sk = localStorage.key(i);
+          if (sk && sk.indexOf('bp:') === 0) {
+            var kName = sk.slice(3);
+            try { all[kName] = JSON.parse(localStorage.getItem(sk)); } catch(e) { all[kName] = localStorage.getItem(sk); }
+          }
+        }
+        return Promise.resolve(all);
+      }
+      var raw = localStorage.getItem('bp:' + key);
+      if (raw == null) return Promise.resolve(null);
+      try { return Promise.resolve(JSON.parse(raw)); } catch(e) { return Promise.resolve(raw); }
     } catch(e) { return Promise.resolve(null); }
   },
   savePlayer: function(playerData) {
-    if (!window.ColorboxAI || !window.ColorboxAI.storage) return;
     Storage.getValue('players').then(function(raw) {
       var arr = [];
       if (raw != null) {
@@ -1762,7 +933,7 @@ function getPlayerMainPos(player) {
 
 /** 安全返回赛季页面：重新渲染后再显示，防止状态异常 */
 function backToSeason() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC22",label:"返回赛季"});
+  
   const schedule = STATE.season?.schedule;
   const hasGames = schedule && schedule.length > 0;
   if (!hasGames) { showScreen('screen-menu'); return; }
@@ -1789,7 +960,7 @@ function logSavedPlayerData() {
 }
 setTimeout(logSavedPlayerData, 500);
 
-/** 验证 ColorboxAI.storage 读写回路 */
+/** 验证本地存储读写回路 */
 function verifyStorage() {
   Storage.waitForReady().then(function(){
     Storage.setValue({ _ping: 'pong' }).then(function(){
@@ -1848,18 +1019,18 @@ function showHelpModal() {
 }
 
 function closeHelpModal() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC31",label:"关闭玩法说明"});
+  
   document.getElementById('helpModal').style.display = 'none';
 }
 
-/** 虎扑App环境检测 */
+/** App环境检测 */
 function getIsInApp() {
-  return /kanqiu|huputiyu/i.test(window.navigator.userAgent || "");
+  return false;
 }
 
 /** 显示下载引导弹窗 */
 function showDownloadModal() {
-  document.getElementById('downloadModal').style.display = 'flex';
+  // removed
 }
 
 function renderHelpPage() {
@@ -1876,12 +1047,12 @@ function renderHelpPage() {
 }
 
 function helpPrevPage() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC32",label:"玩法说明翻页"});
+  
   if (_helpPage > 0) { _helpPage--; renderHelpPage(); }
 }
 
 function helpNextPage() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC32",label:"玩法说明翻页"});
+  
   if (_helpPage < _helpPages.length - 1) { _helpPage++; renderHelpPage(); }
 }
 
@@ -1933,7 +1104,7 @@ function renderModeSelect() {
     const btn = card.querySelector('.fc-btn');
     if (!c.disabled) {
       btn.onclick = (e) => {
-        window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC1",label:"开始游戏"});
+        
         e.stopPropagation();
         STATE.mode = c.mode;
         startGame();
@@ -1946,7 +1117,7 @@ function renderModeSelect() {
 }
 
 function startGame() {
-  ensureHupuUser(true);
+  ensureLocalUser(true);
   if (STATE.mode === 'current' || STATE.mode === 'legend') {
     // 输出灰熊(MEM)和凯尔特人(BOS)全阵容
     console.log('========== 🏀 灰熊(MEM) 全阵容 ==========');
@@ -2203,7 +1374,7 @@ function buildSlotHTML(itemsHtml) {
 let _slotSpinning = false;
 
 function pullHandle() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC3",label:"随机球队-建球员"});
+  
   if (_slotSpinning || STATE._mustLockAfterSpin) return;
   
   // Visual: flash the reel to show it's spinning
@@ -2390,7 +1561,7 @@ function rerollTeamPlayers() {
 }
 
 function pickPlayer(name) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC24",label:"选择球员"});
+  
   if (STATE._locking || !STATE.currentTeam) return;
   const players = NBA2K_DATA[STATE.currentTeam];
   const player = players.find(p => p.name === name);
@@ -2739,7 +1910,7 @@ function revealPlayer() {
     <div class="rv-card-wrap">
       <div class="reveal-card">
         <div class="rv-item" style="animation-delay:0.1s"><div class="reveal-label">我的球员</div></div>
-         <div class="rv-item" style="animation-delay:0.2s"><div class="big-cname">${getHupuDisplayName()}</div></div>
+         <div class="rv-item" style="animation-delay:0.2s"><div class="big-cname">${getDisplayName()}</div></div>
         <div class="rv-ovr" style="animation-delay:0.3s"><div class="big-ovr">${STATE.finalOVR}</div></div>
         <div class="rv-item" style="animation-delay:0.4s"><div class="big-pos">${SIM_CONFIG.POSITIONS[STATE.position]}</div></div>
       </div>
@@ -2751,7 +1922,7 @@ function revealPlayer() {
 }
 
 function goToCareer() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC23",label:"开始生涯"});
+  
   showScreen('screen-career');
   renderCareerSpin();
 }
@@ -2805,7 +1976,7 @@ function renderCareerSpin() {
 }
 
 function pullCareerHandle() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC4",label:"随机球队-生涯"});
+  
   setTimeout(spinCareerSlot, 200);
 }
 
@@ -2886,8 +2057,8 @@ function selectCareerTeam(team) {
   STATE.season.isUserStarter = (role === '首发');
   
   // 构建阵容
-  var isLogin = isHupuLoggedIn();
-  var displayName = getHupuDisplayName();
+  var isLogin = isLoggedIn();
+  var displayName = getDisplayName();
   var userPlayer = {
     name: displayName, cname: displayName,
     ovr: myOvr, pos: STATE.position, posCn: SIM_CONFIG.POSITIONS[pos],
@@ -2942,10 +2113,9 @@ function selectCareerTeam(team) {
     bench.unshift(userPlayer);
   }
   
-  // 自建球员头像：虎扑用户头像 / 默认虎扑logo
-  var defaultAvatar = 'https://i3.hoopchina.com.cn/newsPost/de00f9a83014c2b3196d831d4be1adb9_w_300_h_300_.png';
-  if (!HUPU_USER.loaded || !HUPU_USER.isLogin) { ensureHupuUser(true); }
-  var avatarUrl = getHupuAvatarUrl() || defaultAvatar;
+  // 自建球员头像
+  var defaultAvatar = '';
+  var avatarUrl = getAvatarUrl() || defaultAvatar;
   
   function renderRosterPlayer(p, isUser, idx) {
     var pOvr = parseInt(p.ovr) || 0;
@@ -2983,7 +2153,7 @@ function selectCareerTeam(team) {
         <div style="font-size:24px;font-weight:800;margin:6px 0;font-family:var(--font-display);letter-spacing:2px;">${cnName}</div>
         <div style="font-size:12px;color:var(--text-dim);">我担任的角色为${role}${SIM_CONFIG.POSITIONS[STATE.position]}</div>
         <div style="margin-top:12px;">
-          <button class="btn btn-primary" onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC5',label:'开始赛季'});startSeason()">🏀 开始赛季</button>
+          <button class="btn btn-primary" onclick="startSeason()">🏀 开始赛季</button>
         </div>
       </div>
       <div style="margin-top:8px;background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius-sm);padding:8px 4px;">
@@ -3051,13 +2221,13 @@ function showCareerTeamPicker() {
 }
 
 function closeCareerTeamPicker() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC33",label:"关闭自选球队"});
+  
   var el = document.getElementById('team-picker-overlay');
   if (el) el.remove();
 }
 
 function selectCareerTeamFromPicker(team) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC4b",label:"自选球队-生涯"});
+  
   closeCareerTeamPicker();
   selectCareerTeam(team);
 }
@@ -3134,36 +2304,36 @@ function getPlayerDisplayName(playerName) {
 }
 
 if (!window.TEAM_LOGOS) window.TEAM_LOGOS = {
-  'ATL':'https://activity-static.hoopchina.com.cn/files/26612-t5b21erc-upload-1781237739326-44.png',
-  'BKN':'https://activity-static.hoopchina.com.cn/files/26612-xptpjtrc-upload-1781237796378-12.png',
-  'BOS':'https://activity-static.hoopchina.com.cn/files/26612-ccjancrc-upload-1781237796378-15.png',
-  'CHA':'https://activity-static.hoopchina.com.cn/files/26612-4los1nrc-upload-1781237796378-18.png',
-  'CHI':'https://activity-static.hoopchina.com.cn/files/26612-248zl7rc-upload-1781237796378-21.png',
-  'CLE':'https://activity-static.hoopchina.com.cn/files/26612-9373nkrc-upload-1781237796378-24.png',
-  'DAL':'https://activity-static.hoopchina.com.cn/files/26612-ye2ck7rc-upload-1781237796378-27.png',
-  'DEN':'https://activity-static.hoopchina.com.cn/files/26612-v4su4prc-upload-1781237796378-30.png',
-  'DET':'https://activity-static.hoopchina.com.cn/files/26612-ce809crc-upload-1781237796378-33.png',
-  'GSW':'https://activity-static.hoopchina.com.cn/files/26612-jytyisrc-upload-1781237796378-36.png',
-  'HOU':'https://activity-static.hoopchina.com.cn/files/26612-8x92ebrc-upload-1781237796378-39.png',
-  'IND':'https://activity-static.hoopchina.com.cn/files/26612-q4jolqrc-upload-1781237796378-42.png',
-  'LAC':'https://activity-static.hoopchina.com.cn/files/26612-y0fgwlrc-upload-1781237796378-45.png',
-  'LAL':'https://activity-static.hoopchina.com.cn/files/26614-lqhvdqrc-upload-1781423262777-12.png',
-  'MEM':'https://activity-static.hoopchina.com.cn/files/26612-hkjdthrc-upload-1781237796378-51.png',
-  'MIA':'https://activity-static.hoopchina.com.cn/files/26612-wrdmc9rc-upload-1781237796378-54.png',
-  'MIL':'https://activity-static.hoopchina.com.cn/files/26612-47m8grrc-upload-1781237796378-57.png',
-  'MIN':'https://activity-static.hoopchina.com.cn/files/26612-6y471frc-upload-1781237796378-60.png',
-  'NOP':'https://activity-static.hoopchina.com.cn/files/26612-q64i2mrc-upload-1781237796378-63.png',
-  'NYK':'https://activity-static.hoopchina.com.cn/files/26612-ltjvjerc-upload-1781237796378-66.png',
-  'OKC':'https://activity-static.hoopchina.com.cn/files/26612-103adgrc-upload-1781237796378-69.png',
-  'ORL':'https://activity-static.hoopchina.com.cn/files/26612-0i4175rc-upload-1781237796378-72.png',
-  'PHI':'https://activity-static.hoopchina.com.cn/files/26612-s2kbz8rc-upload-1781237796378-75.png',
-  'PHX':'https://activity-static.hoopchina.com.cn/files/26612-iffq4vrc-upload-1781237796378-78.png',
-  'POR':'https://activity-static.hoopchina.com.cn/files/26612-v2vg2xrc-upload-1781237796378-81.png',
-  'SAC':'https://activity-static.hoopchina.com.cn/files/26612-9g4x3qrc-upload-1781237796378-84.png',
-  'SAS':'https://activity-static.hoopchina.com.cn/files/26612-op4gosrc-upload-1781237796378-87.png',
-  'TOR':'https://activity-static.hoopchina.com.cn/files/26612-yowkavrc-upload-1781237796378-90.png',
-  'UTA':'https://activity-static.hoopchina.com.cn/files/26612-rb5rxsrc-upload-1781237796378-93.png',
-  'WAS':'https://activity-static.hoopchina.com.cn/files/26612-7t2yj4rc-upload-1781237796378-96.png',
+  'ATL':'',
+  'BKN':'',
+  'BOS':'',
+  'CHA':'',
+  'CHI':'',
+  'CLE':'',
+  'DAL':'',
+  'DEN':'',
+  'DET':'',
+  'GSW':'',
+  'HOU':'',
+  'IND':'',
+  'LAC':'',
+  'LAL':'',
+  'MEM':'',
+  'MIA':'',
+  'MIL':'',
+  'MIN':'',
+  'NOP':'',
+  'NYK':'',
+  'OKC':'',
+  'ORL':'',
+  'PHI':'',
+  'PHX':'',
+  'POR':'',
+  'SAC':'',
+  'SAS':'',
+  'TOR':'',
+  'UTA':'',
+  'WAS':'',
 };
 if (!window.TEAM_CITY) window.TEAM_CITY = {
   'ATL':'亚特兰大','BKN':'布鲁克林','BOS':'波士顿','CHA':'夏洛特','CHI':'芝加哥',
@@ -3404,7 +2574,7 @@ function quickSimAllGames() {
         '<div class="section-card" style="animation-delay:0.8s">' + bestHtml + '</div>' +
         '<div class="section-card" style="animation-delay:1.6s">' + tableHtml + '</div>' +
         '<div style="text-align:center;padding:0 12px 16px;" id="simActions">' + actionBtn + '</div>');
-      window.ColorboxAI?.track({act:"exposure",blk:"BMC098",pos:"TC35",label:"赛季结果曝光"});
+      
       return;
     }
 
@@ -3559,7 +2729,7 @@ function calcSeasonAwards() {
   else if (defSum >= 2.5) { dpoyUserRank = '第四名'; }
   var dpoyWin = defSum >= 3.55;
   if (dpoyWin) {
-    STATE.season.awards.push({ act:'dpoy', label:'DPOY', winner:getHupuDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
+    STATE.season.awards.push({ act:'dpoy', label:'DPOY', winner:getDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
   } else {
     var w = lp('Victor Wembanyama') || { team:'SAS', cname:'维克托-文班亚马' };
     STATE.season.awards.push({ act:'dpoy', label:'DPOY', winner:w.cname, winnerEN:'Victor Wembanyama', team:w.team, isUser:false, userRank:dpoyUserRank });
@@ -3567,7 +2737,7 @@ function calcSeasonAwards() {
 
   // 最佳阵容：按位置取全联盟 Top 5
   (function() {
-    var userAvg2 = { pts: avg.pts, reb: avg.reb, ast: avg.ast, stl: avg.stl, blk: avg.blk, pos: STATE.position, ovr: STATE.finalOVR, name:getHupuDisplayName(), team:STATE.careerTeam };
+    var userAvg2 = { pts: avg.pts, reb: avg.reb, ast: avg.ast, stl: avg.stl, blk: avg.blk, pos: STATE.position, ovr: STATE.finalOVR, name:getDisplayName(), team:STATE.careerTeam };
     var allNBACandidates = [];
     for (var _ti = 0; _ti < NBA2K_TEAMS.length; _ti++) {
       var _r2 = NBA2K_DATA[NBA2K_TEAMS[_ti]];
@@ -3583,7 +2753,7 @@ function calcSeasonAwards() {
         allNBACandidates.push({ name: p.cname || p.name, playerName: p.name, team: NBA2K_TEAMS[_ti], pos: pos2, pts: epts, reb: ereb, ast: east, ovr: ovr2, score: epts * 0.4 + ereb * 0.15 + east * 0.15 + (ovr2/99) * 5, isUser: false });
       }
     }
-    allNBACandidates.push({ name:getHupuDisplayName(), playerName:'', team:STATE.careerTeam, pos:userAvg2.pos, pts:userAvg2.pts, reb:userAvg2.reb, ast:userAvg2.ast, ovr:userAvg2.ovr, score: userAvg2.pts * 0.4 + userAvg2.reb * 0.15 + userAvg2.ast * 0.15 + (userAvg2.ovr/99) * 5, isUser: true });
+    allNBACandidates.push({ name:getDisplayName(), playerName:'', team:STATE.careerTeam, pos:userAvg2.pos, pts:userAvg2.pts, reb:userAvg2.reb, ast:userAvg2.ast, ovr:userAvg2.ovr, score: userAvg2.pts * 0.4 + userAvg2.reb * 0.15 + userAvg2.ast * 0.15 + (userAvg2.ovr/99) * 5, isUser: true });
     allNBACandidates.sort(function(a,b) { return b.score - a.score; });
 
     var posOrder = ['PG','SG','SF','PF','C'];
@@ -3618,7 +2788,7 @@ function calcSeasonAwards() {
   else if (STATE.finalOVR >= 85 && cSeed < 10) { rotyRank = '第四名'; }
   var rotyWin = STATE.finalOVR >= 88 && cSeed <= 6;
   if (rotyWin) {
-    STATE.season.awards.push({ act:'roty', label:'年度最佳新秀', winner:getHupuDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
+    STATE.season.awards.push({ act:'roty', label:'年度最佳新秀', winner:getDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
   } else {
     var pool = [
       lp('Cooper Flagg') || { cname:'库珀-弗拉格', playerName:'Cooper Flagg' },
@@ -3651,7 +2821,7 @@ function calcSeasonAwards() {
     var names = rookies.map(function(r) { return r.cname; });
     // 第5人（Coward）根据ROTY排名替换为用户
     if (rotyIsTop4) {
-      names[4] = getHupuDisplayName();
+      names[4] = getDisplayName();
     }
     var winnerList = names.join('、');
     STATE.season.awards.push({ act:'allRookie', label:'最佳新秀阵容', winner:winnerList, winnerEN:'', team:'', isUser:userInRookie, userRank:userRookieRank, isList:true });
@@ -3690,7 +2860,7 @@ function calcSeasonAwards() {
     }
     var sixthWin = userIsBench && avg.pts >= 18;
     if (sixthWin) {
-      STATE.season.awards.push({ act:'sixthman', label:'最佳第六人', winner:getHupuDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
+      STATE.season.awards.push({ act:'sixthman', label:'最佳第六人', winner:getDisplayName(), winnerEN:'', team:STATE.careerTeam, isUser:true, userRank:'🥇 第一名' });
     } else {
       STATE.season.awards.push({ act:'sixthman', label:'最佳第六人', winner:bCN2, winnerEN:bestBench?.name || '', team:bestBTeam, isUser:false, userRank:userSixthRank });
     }
@@ -3700,7 +2870,7 @@ function calcSeasonAwards() {
 
 /** 奖项页：每个奖项一行，头像 + 获奖者 + 排名 */
 function showAwardsScreen() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC25",label:"常规赛奖项"});
+  
   if (!STATE.season.awards || STATE.season.awards.length === 0) calcSeasonAwards();
   var awards = STATE.season.awards;
   if (!awards || awards.length === 0) return;
@@ -3738,13 +2908,13 @@ function showAwardsScreen() {
 
     // 头像（列表奖项留空占位，保证对齐）
     var headshotHtml = '';
-    var TEAM_ICON = 'https://i4.hoopchina.com.cn/colorbox/6bd73a77ab165f7791ef4a650965e797.png';
+    var TEAM_ICON = '';
     if (a.isList) {
       headshotHtml = '<div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;background-image:url(' + TEAM_ICON + ');background-size:cover;background-position:center;border:2px solid var(--orange);"></div>';
     } else {
       var hsStyle = '';
       if (a.isUser) {
-        var avatarUrl = getHupuAvatarUrl();
+        var avatarUrl = getAvatarUrl();
         if (avatarUrl) hsStyle = 'background-image:url(' + avatarUrl + ');background-size:cover;background-position:center;';
       } else if (a.winnerEN) {
         hsStyle = getHs(a.winnerEN);
@@ -3761,7 +2931,7 @@ function showAwardsScreen() {
       var names = a.winner.split('、');
       leftContent = '<div style="padding:2px 0 0;">';
       for (var ni = 0; ni < names.length; ni++) {
-        var isMy = names[ni] === getHupuDisplayName();
+        var isMy = names[ni] === getDisplayName();
         leftContent += '<div style="font-size:11px;' + (isMy ? 'color:var(--orange);font-weight:700;' : 'color:var(--text);font-weight:500;') + ';line-height:1.5;">' + (isMy ? '⭐ ' : '') + names[ni].replace(/·/g, '-') + '</div>';
       }
       leftContent += '</div>';
@@ -3794,7 +2964,7 @@ function showAwardsScreen() {
   html('awards-content').innerHTML =
     rowsHtml +
     '<div style="text-align:center;padding:8px 0 0;">' + actionBtns + '</div>';
-  window.ColorboxAI?.track({act:"exposure",blk:"BMC098",pos:"TC34",label:"奖项内容曝光"});
+  
   }, 1500);
 }
 
@@ -3959,7 +3129,7 @@ function calcTeamLineup(team) {
     // ★ 季后赛用户评分 debuff：OVR 降低，模拟季后赛强度更大、被针对
     const isPlayoffs = STATE.season?.isPlayoffs;
     const playoffDebuff = isPlayoffs ? 5 : 0;
-    var _displayName = getHupuDisplayName();
+    var _displayName = getDisplayName();
     userPlayer = {
       name: _displayName,
       cname: _displayName,
@@ -4529,7 +3699,7 @@ function simLeagueDay(daySchedule) {
 // ★ [实验性] 以下函数已被 quickSimAllGames 替代，保留作参考
 /*
 function simNextGame() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC6",label:"进行下一场"});
+  
   // ★ 批量进行中时禁止单场点击，防止重复计数
   if (STATE._batchInProgress) return;
   const schedule = STATE.season.schedule;
@@ -4837,7 +4007,7 @@ function renderSeasonUI() {
     const prefix = nextGame ? (nextGame.home ? 'vs' : '@') : '';
     nextBtn = `
       <button class="btn btn-gold btn-sm" onclick="simNextGame()" style="flex:1;">进行下一场</button>
-      <button class="btn btn-gold btn-sm" onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC17',label:'进行下十场'});simBatch(10)" style="flex:1;">⏩ 进行下十场</button>
+      <button class="btn btn-gold btn-sm" onclick="simBatch(10)" style="flex:1;">⏩ 进行下十场</button>
     `;
   }
   html('season-controls').innerHTML = `
@@ -4900,7 +4070,7 @@ function renderCalendar() {
       <button class="cal-nav" onclick="switchCalendar(${monthIdx - 1})" ${monthIdx === 0 ? 'disabled' : ''}>◀</button>
       <span class="cal-title">${month.name}</span>
       <button class="cal-nav" onclick="switchCalendar(${monthIdx + 1})" ${monthIdx >= SEASON_MONTHS.length - 1 ? 'disabled' : ''}>▶</button>
-      <button class="cal-standings-btn" onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC14',label:'排行榜'});showStandingsModal()">🏆 排行榜</button>
+      <button class="cal-standings-btn" onclick="showStandingsModal()">🏆 排行榜</button>
     </div>`;
   
   // 星期头
@@ -4966,7 +4136,7 @@ function renderCalendar() {
 }
 
 function switchCalendar(idx) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC26",label:"切换日历"});
+  
   if (idx < 0 || idx >= SEASON_MONTHS.length) return;
   STATE._calendarMonth = idx;
   renderCalendar();
@@ -4974,7 +4144,7 @@ function switchCalendar(idx) {
 
 /** 点击已赛场次 → 弹窗显示比分 + 你的表现 */
 function showGamePopup(seasonDay) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC27",label:"查看比赛详情"});
+  
   const gameData = STATE.season.games.find(gg => gg.game.day === seasonDay);
   if (!gameData) return;
   const { result, stats, game } = gameData;
@@ -5138,7 +4308,7 @@ function switchStandingsTab(conf) {
 }
 
 function closeStandingsModal() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC28",label:"关闭排行榜"});
+  
   const modal = document.getElementById('standings-modal');
   if (modal) modal.remove();
 }
@@ -5423,7 +4593,7 @@ function autoSimNonUserPlayInGames() {
 }
 
 function simPlayInGame(gameId) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC10",label:"模拟附加赛"});
+  
   const pi = STATE.season.playInState;
   if (!pi) return;
   
@@ -5706,7 +4876,7 @@ function autoSimConferenceBracket(confBracket) {
 }
 
 function renderPlayoffs() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC9",label:"进入季后赛"});
+  
   showScreen('screen-playoffs');
   
   // 安全检查
@@ -6035,7 +5205,7 @@ function renderPlayoffBracketUI() {
 
 /** 切换轮次 */
 function navigatePlayoffRound(dir) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC29",label:"切换季后赛轮次"});
+  
   // 动态计算总轮数（含附加赛）
   const pi = STATE.season.playInState;
   const viewConf = STATE.season._viewConf;
@@ -6051,7 +5221,7 @@ function navigatePlayoffRound(dir) {
 
 /** 切换查看的分区 */
 function switchPlayoffConf(conf) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC30",label:"切换季后赛分区"});
+  
   STATE.season._viewConf = conf;
   renderPlayoffBracketUI();
 }
@@ -6191,7 +5361,7 @@ function simOnePlayoffGame(round, seriesIdx, teamA, teamB, isMySeries, gameNum, 
 
 /** 主要入口：模拟季后赛系列赛（用户系列赛一场一场弹） */
 function simPlayoffSeries(round, seriesIdx) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC11",label:"开始系列赛"});
+  
   const bracket = STATE.season.playoffBracket;
   if (!bracket) return;
   
@@ -6614,7 +5784,7 @@ function showPlayoffGamePopup(round, seriesIdx, gameIdx) {
 
 // ==================== 赛季统一结果页 ====================
 function showSeasonResults() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC12",label:"查看赛季总结"});
+  
   // 安全检查：防止赛季未初始化时访问异常
   if (!STATE.season || !STATE.season.playerStats) {
     showScreen('screen-menu');
@@ -6775,7 +5945,7 @@ function showSeasonResults() {
       <!-- 按钮 -->
       <div class="sr-actions">
         <button class="btn btn-primary" onclick="if(typeof generateBuildPlayerPoster==='function')generateBuildPlayerPoster();else alert('海报模块加载中...')">🖼️ 生成海报</button>
-        <button class="btn btn-secondary" onclick="window.ColorboxAI?.track({act:'click',blk:'BMC098',pos:'TC18',label:'重新开始'});initGame()" style="margin-top:8px;">🔄 重新开始</button>
+        <button class="btn btn-secondary" onclick="initGame()" style="margin-top:8px;">🔄 重新开始</button>
       </div>
     </div>
   `;
@@ -6783,7 +5953,7 @@ function showSeasonResults() {
 
 // ==================== My Card（实时数据面板）====================
 function showMyCard() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC7",label:"我的数据"});
+  
   showScreen('screen-mycard');
   const isFinal = !STATE.season.schedule?.find(g => !g.simulated);
   renderMyCard(isFinal);
@@ -6883,7 +6053,7 @@ function renderMyCard(isFinal) {
     <div class="mycard">
       <div class="mc-header">
         <div class="mc-pos">${SIM_CONFIG.POSITIONS[STATE.position]}</div>
-        <div class="mc-name">${getHupuDisplayName()}</div>
+        <div class="mc-name">${getDisplayName()}</div>
         <div class="mc-ovr-row">
           <span class="mc-ovr">${STATE.finalOVR}</span>
 
@@ -6925,48 +6095,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<!-- ====== 海报生成 & 虎扑发帖 ====== -->
+<!-- ====== 海报生成 ====== -->
 <script>
-// ── 配置 ──
-var POSTER_TAG_ID = 152165;
-var POSTER_TAG_NAME = '我创造的完美球员';
-var POSTER_TOPIC_NAME = '湿乎乎的话题';
-var POSTER_TOPIC_ID = 177;
+// -- config --
 var POSTER_W = 620;
 var POSTER_SCALE = 2;
 
-// window.require shim
-window.require = window.require || function(name) {
-  if (name === 'ali-oss') return window.OSS;
-  if (name === '@hupu/kaleido-fed-sdk') return window.KaleidoOSS;
-  return null;
-};
-
-var _ossClient = null;
-
-// ── 预加载虎扑Logo ──
-var _hupuLogo = null;
-(function(){
-  var img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function(){ _hupuLogo = img; };
-  img.src = 'https://i3.hoopchina.com.cn/newsPost/de00f9a83014c2b3196d831d4be1adb9_w_300_h_300_.png';
-})();
-function getOssClient() {
-  if (_ossClient) return _ossClient;
-  var K = window.KaleidoOSS || (typeof require === 'function' ? require('@hupu/kaleido-fed-sdk') : null);
-  if (K) {
-    _ossClient = new K({
-      appId: 'b1AcxWKA1u0hyDYv5kXgImZBRSQ=',
-      module: 'activity-screenshot-fed',
-      path: '/screenshot/activity/fed',
-      sk: 'HioGpkmGe9bsW0iqRLJEyGoLr4Q=',
-      action: '1',
-    });
-    if (typeof _ossClient.start === 'function') _ossClient.start();
-  }
-  return _ossClient;
-}
 
 function roundRectC(ctx, x, y, w, h, r) {
   ctx.beginPath();
@@ -6983,7 +6117,7 @@ function roundRectC(ctx, x, y, w, h, r) {
 }
 
 function generateBuildPlayerPoster() {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC8",label:"生成海报"});
+  
   var s = STATE;
   if (!s.finalOVR) { alert('请先完成赛季！'); return; }
 
@@ -7106,13 +6240,6 @@ function generateBuildPlayerPoster() {
 
   // ═══ 1. sr-header ═══
   y = 16;
-  // 右上角虎扑Logo
-  if (_hupuLogo) {
-    ctx.save();
-    var logoSize = 28;
-    ctx.drawImage(_hupuLogo, W - 14 - logoSize, y - 4, logoSize, logoSize);
-    ctx.restore();
-  }
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   ctx.fillStyle = C.text;
   ctx.font = '800 22px ' + C.fd;
@@ -7317,64 +6444,16 @@ function dataURLToBlob(dataURL) {
 }
 
 function uploadToOSS(file, filename) {
-  return new Promise(function(resolve, reject) {
-    // 方案1: ColorboxAI
-    if (window.ColorboxAI && window.ColorboxAI.oss && typeof window.ColorboxAI.oss.uploadFile === 'function') {
-      window.ColorboxAI.oss.uploadFile({ file: file, filename: filename })
-        .then(function(res) { resolve(res.downloadUrl || ''); })
-        .catch(reject);
-      return;
-    }
-    // 方案2: postMessage Bridge
-    if (window.parent && window.parent !== window) {
-      var callbackId = '_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-      var timer = setTimeout(function() { cleanup(); reject(new Error('上传超时')); }, 30000);
-      var handler = function(e) {
-        var d = e.data;
-        if (d && d.protocol === 'colorbox-ai-bridge' && d.type === 'oss.upload.callback' && d.payload && d.payload.callbackId === callbackId) {
-          clearTimeout(timer); cleanup();
-          d.payload.error ? reject(new Error(d.payload.error)) : resolve(d.payload.downloadUrl || '');
-        }
-      };
-      var cleanup = function() { window.removeEventListener('message', handler); };
-      window.addEventListener('message', handler);
-      window.parent.postMessage({
-        protocol: 'colorbox-ai-bridge', version: 1, direction: 'frame-to-host',
-        type: 'oss.upload',
-        payload: { file: file, filename: filename, callbackId: callbackId }
-      }, '*');
-      return;
-    }
-    // 方案3: 直连 KaleidoOSS
-    var client = getOssClient();
-    if (client) {
-      var ext = filename.lastIndexOf('.') >= 0 ? filename.slice(filename.lastIndexOf('.')) : '.png';
-      var now = new Date();
-      var key = 'user-upload/' + (now.getFullYear() % 100) + (now.getMonth() + 1) + now.getDate() + '-' + Math.random().toString(36).slice(-6) + ext;
-      client.multipartUpload(key, file, {})
-        .then(function(res) { resolve(res.downloadUrl || 'https://activity-static.hoopchina.com.cn/' + res.name); })
-        .catch(reject);
-      return;
-    }
-    reject(new Error('No upload capability'));
-  });
+  return Promise.reject(new Error('upload disabled'));
 }
 
 function safeNavigate(url, target) {
-  if (window.ColorboxAI && typeof window.ColorboxAI.navigateTo === 'function') {
-    try { window.ColorboxAI.navigateTo(url, target || '_blank'); return; } catch(e) {}
-  }
-  if (window.ColorboxAI && typeof window.ColorboxAI.openUrl === 'function') {
-    try { window.ColorboxAI.openUrl(url); return; } catch(e) {}
-  }
+  try { window.open(url, target || '_blank'); } catch(e) {}
 }
 
 async function sharePoster(btn) {
-  window.ColorboxAI?.track({act:"click",blk:"BMC098",pos:"TC13",label:"一键发帖"});
   var dataURL = window._posterDataURL;
   if (!dataURL) return;
-
-  // 非虎扑App环境：直接下载海报图片
   var filename = 'buildplayer_' + Date.now() + '.png';
   var a = document.createElement('a');
   a.href = dataURL;
